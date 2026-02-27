@@ -36,7 +36,7 @@
 ### Documents
 
 - <doc:FileManagement>
-- ``WorkspaceDocument``
+- ``WorkspaceModel``
 - ``CEWorkspaceFile``
 - ``CEWorkspaceFileManager``
 - ``CodeFileDocument``

@@ -8,20 +8,18 @@
 import SwiftUI
 
 struct SchemeDropDownView: View {
-    @Environment(\.colorScheme)
-    private var colorScheme
-
-    @Environment(\.controlActiveState)
-    private var activeState
+	@Environment(\.openWindow) private var openWindow
+    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.controlActiveState) private var activeState
 
     @State var isSchemePopOverPresented: Bool = false
     @State private var isHoveringScheme: Bool = false
 
-    @ObservedObject var workspaceSettingsManager: CEWorkspaceSettings
-    var workspaceFileManager: CEWorkspaceFileManager?
+    let workspaceSettingsManager: WorkspaceSettingsManager?
+    let workspaceFileManager: CEWorkspaceFileManager?
 
     var workspaceName: String {
-        workspaceSettingsManager.settings.project.projectName
+        workspaceSettingsManager?.settings.project.projectName ?? ""
     }
 
     /// Resolves the name one step further than `workspaceName`.
@@ -147,9 +145,7 @@ struct SchemeDropDownView: View {
             }
             .disabled(true)
             OptionMenuItemView(label: "Workspace Settings...") {
-                NSApp.sendAction(
-                    #selector(CodeEditWindowController.openWorkspaceSettings(_:)), to: nil, from: nil
-                )
+				openWindow(sceneID: .workspaceSettings)
             }
         }
     }

@@ -15,7 +15,7 @@ final class ProjectNavigatorMenu: NSMenu {
     var item: CEWorkspaceFile?
 
     /// The workspace, for opening the item
-    var workspace: WorkspaceDocument?
+    var workspace: WorkspaceModel?
 
     /// The  `ProjectNavigatorViewController` is being called from.
     /// By sending it, we can access it's variables and functions.

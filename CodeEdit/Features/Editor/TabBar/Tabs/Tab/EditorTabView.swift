@@ -21,8 +21,8 @@ struct EditorTabView: View {
     @Environment(\.isFullscreen)
     private var isFullscreen
 
-    @EnvironmentObject var workspace: WorkspaceDocument
-    @EnvironmentObject private var editorManager: EditorManager
+    @Environment(WorkspaceModel.self) var workspace
+    @Environment(EditorManager.self) private var editorManager
 
     @StateObject private var fileObserver: EditorTabFileObserver
 

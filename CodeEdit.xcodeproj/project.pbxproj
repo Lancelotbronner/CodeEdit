@@ -45,6 +45,7 @@
 		6CCF73D02E26DE3200B94F75 /* SwiftTerm in Frameworks */ = {isa = PBXBuildFile; productRef = 6CCF73CF2E26DE3200B94F75 /* SwiftTerm */; };
 		6CD3CA552C8B508200D83DCD /* CodeEditSourceEditor in Frameworks */ = {isa = PBXBuildFile; productRef = 6CD3CA542C8B508200D83DCD /* CodeEditSourceEditor */; };
 		6CE21E872C650D2C0031B056 /* SwiftTerm in Frameworks */ = {isa = PBXBuildFile; productRef = 6CE21E862C650D2C0031B056 /* SwiftTerm */; };
+		73AA5CEE2F4F5FF300EC4DB5 /* swift-tuple in Frameworks */ = {isa = PBXBuildFile; productRef = 73AA5CED2F4F5FF300EC4DB5 /* swift-tuple */; };
 		B6FF04782B6C08AC002C2C78 /* DefaultThemes in Resources */ = {isa = PBXBuildFile; fileRef = B6FF04772B6C08AC002C2C78 /* DefaultThemes */; };
 /* End PBXBuildFile section */
 
@@ -183,6 +184,7 @@
 				6CD3CA552C8B508200D83DCD /* CodeEditSourceEditor in Frameworks */,
 				6C0617D62BDB4432008C9C42 /* LogStream in Frameworks */,
 				6CC17B4F2C432AE000834E2C /* CodeEditSourceEditor in Frameworks */,
+				73AA5CEE2F4F5FF300EC4DB5 /* swift-tuple in Frameworks */,
 				6CCF6DD32E26D48F00B94F75 /* SwiftTerm in Frameworks */,
 				30CB64912C16CA8100CC8A9E /* LanguageServerProtocol in Frameworks */,
 				5E4485612DF600D9008BBE69 /* AboutWindow in Frameworks */,
@@ -304,7 +306,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				6C7B1C762A1D57CE005CBBFC /* PBXTargetDependency */,
 				2BE487F328245162003F3F64 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
@@ -337,6 +338,7 @@
 				6C76D6D32E15B91E00EF52C3 /* CodeEditSourceEditor */,
 				6CCF6DD22E26D48F00B94F75 /* SwiftTerm */,
 				6CCF73CF2E26DE3200B94F75 /* SwiftTerm */,
+				73AA5CED2F4F5FF300EC4DB5 /* swift-tuple */,
 			);
 			productName = CodeEdit;
 			productReference = B658FB2C27DA9E0F00EA4DBD /* CodeEdit.app */;
@@ -443,6 +445,7 @@
 				5E44855F2DF600D9008BBE69 /* XCRemoteSwiftPackageReference "AboutWindow" */,
 				6C76D6D22E15B91E00EF52C3 /* XCRemoteSwiftPackageReference "CodeEditSourceEditor" */,
 				6CCF73CE2E26DE3200B94F75 /* XCRemoteSwiftPackageReference "SwiftTerm" */,
+				73AA5CEC2F4F5FF300EC4DB5 /* XCRemoteSwiftPackageReference "swift-tuple" */,
 			);
 			preferredProjectObjectVersion = 55;
 			productRefGroup = B658FB2D27DA9E0F00EA4DBD /* Products */;
@@ -573,10 +576,6 @@
 			isa = PBXTargetDependency;
 			target = 2BE487EB28245162003F3F64 /* OpenWithCodeEdit */;
 			targetProxy = 2BE487F228245162003F3F64 /* PBXContainerItemProxy */;
-		};
-		6C7B1C762A1D57CE005CBBFC /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			productRef = 6C7B1C752A1D57CE005CBBFC /* SwiftLint */;
 		};
 		B658FB3F27DA9E1000EA4DBD /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1856,6 +1855,14 @@
 				kind = branch;
 			};
 		};
+		73AA5CEC2F4F5FF300EC4DB5 /* XCRemoteSwiftPackageReference "swift-tuple" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Lancelotbronner/swift-tuple.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1940,11 +1947,6 @@
 			package = 6C76D6D22E15B91E00EF52C3 /* XCRemoteSwiftPackageReference "CodeEditSourceEditor" */;
 			productName = CodeEditSourceEditor;
 		};
-		6C7B1C752A1D57CE005CBBFC /* SwiftLint */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 287136B1292A407E00E9F5F4 /* XCRemoteSwiftPackageReference "SwiftLintPlugin" */;
-			productName = "plugin:SwiftLint";
-		};
 		6C81916A29B41DD300B75C92 /* DequeModule */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 6C147C4329A329350089B630 /* XCRemoteSwiftPackageReference "swift-collections" */;
@@ -1998,6 +2000,11 @@
 		6CE21E862C650D2C0031B056 /* SwiftTerm */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SwiftTerm;
+		};
+		73AA5CED2F4F5FF300EC4DB5 /* swift-tuple */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 73AA5CEC2F4F5FF300EC4DB5 /* XCRemoteSwiftPackageReference "swift-tuple" */;
+			productName = "swift-tuple";
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

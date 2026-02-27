@@ -1,5 +1,5 @@
 //
-//  WorkspaceDocument+Find.swift
+//  WorkspaceModel+Find.swift
 //  CodeEdit
 //
 //  Created by Tommy Ludwig on 02.01.24.
@@ -7,9 +7,9 @@
 
 import Foundation
 
-extension WorkspaceDocument.SearchState: @unchecked Sendable {}
+extension WorkspaceModel.SearchState: @unchecked Sendable {}
 
-extension WorkspaceDocument.SearchState {
+extension WorkspaceModel.SearchState {
     /// Creates a search term based on the given query and search mode.
     ///
     /// - Parameter query: The original user query string.
@@ -50,7 +50,7 @@ extension WorkspaceDocument.SearchState {
     /// - Returns: A string representing the regular expression pattern based on the selected search mode.
     ///
     /// - Note: This function is creating similar patterns to the
-    /// ``WorkspaceDocument/SearchState-swift.class/getSearchTerm(_:)`` function,
+    /// ``WorkspaceModel/SearchState-swift.class/getSearchTerm(_:)`` function,
     /// Except its using the word boundary anchor(\b) instead of the asterisk(\*).
     /// This is needed to highlight the search results correctly.
     func getRegexPattern(_ query: String) -> String {
@@ -75,14 +75,14 @@ extension WorkspaceDocument.SearchState {
     }
 
     /// Searches the entire workspace for the given string, using the
-    /// ``WorkspaceDocument/SearchState-swift.class/selectedMode`` modifiers
+    /// ``WorkspaceModel/SearchState-swift.class/selectedMode`` modifiers
     /// to modify the search if needed. This is done by filtering out files with SearchKit and then searching
     /// within each file for the given string.
     ///
     /// This method will update
-    /// ``WorkspaceDocument/SearchState-swift.class/searchResult``,
-    /// ``WorkspaceDocument/SearchState-swift.class/searchResultsFileCount``
-    /// and ``WorkspaceDocument/SearchState-swift.class/searchResultCount`` with any matched
+    /// ``WorkspaceModel/SearchState-swift.class/searchResult``,
+    /// ``WorkspaceModel/SearchState-swift.class/searchResultsFileCount``
+    /// and ``WorkspaceModel/SearchState-swift.class/searchResultCount`` with any matched
     /// search results. See ``SearchResultModel`` and ``SearchResultMatchModel``
     /// for more information on search results and matches.
     ///

@@ -7,10 +7,11 @@
 
 import Foundation
 
-class NavigatorAreaViewModel: ObservableObject {
-    @Published var selectedTab: NavigatorTab? = .project
+@Observable
+final class NavigatorAreaViewModel {
+    var selectedTab: NavigatorTab? = .project
     /// The tab bar items in the Navigator
-    @Published var tabItems: [NavigatorTab] = []
+    var tabItems: [NavigatorTab] = []
 
     func setNavigatorTab(tab newTab: NavigatorTab) {
         selectedTab = newTab

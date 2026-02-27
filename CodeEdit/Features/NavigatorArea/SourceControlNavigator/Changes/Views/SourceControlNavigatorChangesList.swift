@@ -9,8 +9,8 @@ import AppKit
 import SwiftUI
 
 struct SourceControlNavigatorChangesList: View {
-    @EnvironmentObject var workspace: WorkspaceDocument
-    @EnvironmentObject var sourceControlManager: SourceControlManager
+    @Environment(WorkspaceModel.self) var workspace
+	@Bindable var sourceControlManager: RepositoryModel
 
     @State var selection = Set<GitChangedFile>()
 
@@ -76,7 +76,7 @@ struct SourceControlNavigatorChangesList: View {
             return
         }
         DispatchQueue.main.async {
-            workspace.editorManager?.openTab(item: ceFile, asTemporary: true)
+			workspace.editorManager.openTab(item: ceFile, asTemporary: true)
         }
     }
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension SourceControlManager {
+extension RepositoryModel {
     /// Validate repository
     func validate() async throws {
         let isGitRepository = await gitClient.validate()
@@ -75,17 +75,17 @@ extension SourceControlManager {
     }
 
     /// Apply stash entry
-    func applyStashEntry(stashEntry: GitStashEntry) async throws {
+	func applyStashEntry(stashEntry: GitStashEntry, in workspace: WorkspaceModel) async throws {
         try await gitClient.applyStashEntry(stashEntry.index)
         try await refreshStashEntries()
-        await refreshAllChangedFiles()
+		await refreshAllChangedFiles(in: workspace.workspaceFileManager!)
     }
 
     /// Stash changes
-    func stashChanges(message: String?) async throws {
+	func stashChanges(message: String?, in workspace: WorkspaceModel) async throws {
         try await gitClient.stash(message: message)
         try await refreshStashEntries()
-        await refreshAllChangedFiles()
+		await refreshAllChangedFiles(in: workspace.workspaceFileManager!)
     }
 
     /// Delete remote
@@ -102,7 +102,7 @@ extension SourceControlManager {
                 // TODO: Refresh content of active and unmodified document,
                 // requires CodeEditSourceEditor changes
             } catch {
-                logger.error("Failed to discard changes for file (\(file.lastPathComponent): \(error)")
+				Self.logger.error("Failed to discard changes for file (\(file.lastPathComponent): \(error)")
                 await showAlertForError(title: "Failed to discard changes", error: error)
             }
         }
@@ -116,7 +116,7 @@ extension SourceControlManager {
                 // TODO: Refresh content of active and unmodified document,
                 // requires CodeEditSourceEditor changes
             } catch {
-                logger.error("Failed to discard changes: \(error)")
+				Self.logger.error("Failed to discard changes: \(error)")
                 await showAlertForError(title: "Failed to discard changes", error: error)
             }
         }
@@ -130,11 +130,7 @@ extension SourceControlManager {
 
     /// Refresh git status for files in project navigator
     @MainActor
-    private func refreshStatusInFileManager() {
-        guard let fileManager = fileManager else {
-            return
-        }
-
+	private func refreshStatus(in fileManager: CEWorkspaceFileManager) {
         var updatedStatusFor: Set<CEWorkspaceFile> = []
         // Refresh status of file manager files
         for changedFile in changedFiles {
@@ -161,7 +157,7 @@ extension SourceControlManager {
     }
 
     /// Refresh all changed files and refresh status in file manager
-    func refreshAllChangedFiles() async {
+	func refreshAllChangedFiles(in fileManager: CEWorkspaceFileManager) async {
         do {
             let status = try await gitClient.getStatus()
 
@@ -169,11 +165,11 @@ extension SourceControlManager {
             // status.unmergedChanges
 
             await setChangedFiles(status.changedFiles + status.untrackedFiles)
-            await refreshStatusInFileManager()
+            await refreshStatus(in: fileManager)
         } catch GitClient.GitClientError.notGitRepository {
             await setChangedFiles([])
         } catch {
-            logger.error("Error fetching git status: \(error)")
+			Self.logger.error("Error fetching git status: \(error)")
             await setChangedFiles([])
         }
     }
@@ -183,16 +179,16 @@ extension SourceControlManager {
         do {
             return try await gitClient.getCommitChangedFiles(commitSHA: commitSHA)
         } catch {
-            logger.error("Error committing changed files: \(error)")
+			Self.logger.error("Error committing changed files: \(error)")
             return []
         }
     }
 
     /// Commit files selected by user
-    func commit(message: String, details: String? = nil) async throws {
+	func commit(message: String, details: String? = nil, in workspace: WorkspaceModel) async throws {
         try await gitClient.commit(message: message, details: details)
 
-        await self.refreshAllChangedFiles()
+		await self.refreshAllChangedFiles(in: workspace.workspaceFileManager!)
         await self.refreshNumberOfUnsyncedCommits()
     }
 

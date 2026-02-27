@@ -35,7 +35,7 @@ final class ProjectNavigatorViewController: NSViewController {
     var filteredContentChildren: [CEWorkspaceFile: [CEWorkspaceFile]] = [:]
     var expandedItems: Set<CEWorkspaceFile> = []
 
-    weak var workspace: WorkspaceDocument?
+    weak var workspace: WorkspaceModel?
     weak var editor: Editor?
 
     var iconColor: SettingsData.FileIconStyle = .color {
@@ -146,7 +146,7 @@ final class ProjectNavigatorViewController: NSViewController {
     /// Forces to reveal the selected file through the command regardless of the auto reveal setting
     @objc
     func revealFile(_ sender: Any) {
-        updateSelection(itemID: workspace?.editorManager?.activeEditor.selectedTab?.file.id, forcesReveal: true)
+		updateSelection(itemID: workspace?.editorManager.activeEditor.selectedTab?.file.id, forcesReveal: true)
     }
 
     /// Updates the selection of the ``outlineView`` whenever it changes.
@@ -177,7 +177,7 @@ final class ProjectNavigatorViewController: NSViewController {
                 outlineView.expandItem(item)
             }
         } else if Settings[\.navigation].navigationStyle == .openInTabs {
-            workspace?.editorManager?.activeEditor.openTab(file: item, asTemporary: false)
+			workspace?.editorManager.activeEditor.openTab(file: item, asTemporary: false)
         }
     }
 

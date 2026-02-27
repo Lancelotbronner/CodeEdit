@@ -10,10 +10,10 @@ This view should be set to the `view` property in a [`NSToolbarItem`](https://de
 
 ## Usage
 
-First make sure a `WorkspaceDocument` is accessible in the context.
+First make sure a `WorkspaceModel` is accessible in the context.
 
 ```swift
-var workspace: WorkspaceDocument?
+var workspace: WorkspaceModel?
 ```
 
 Then in 

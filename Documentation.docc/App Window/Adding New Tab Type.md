@@ -50,25 +50,25 @@ public enum EditorTabID: Codable, Identifiable, Hashable {
 
 ### Opening and closing new tab types
 
-Tabs are opened using ``WorkspaceDocument/openTab(item:)`` method. It does a set of common
+Tabs are opened using ``WorkspaceModel/openTab(item:)`` method. It does a set of common
 things for all tabs. But also it calls a private method based on the ``EditorTabID`` of the
 item. The private method for your ``EditorTabRepresentable`` MUST persist this item
 somewhere (I recommend persisting them in ``WorkspaceSelectionState``).
 
-The same is for closing tabs using ``WorkspaceDocument/closeTab(item:)`` method.
+The same is for closing tabs using ``WorkspaceModel/closeTab(item:)`` method.
 Closing multiple tabs at once is handled by common functions, so there are no changes
 required for them.
 
-``WorkspaceDocument/close()`` calls `WorkspaceDocument.saveSelectionState()` to persist Workspace Selection State to UserDefaults.
+``WorkspaceModel/close()`` calls `WorkspaceModel.saveSelectionState()` to persist Workspace Selection State to UserDefaults.
 
-``WorkspaceDocument/read(from:ofType:)`` calls `WorkspaceDocument.readSelectionState()` to retrieve Workspace Selection State from UserDefaults.
+``WorkspaceModel/read(from:ofType:)`` calls `WorkspaceModel.readSelectionState()` to retrieve Workspace Selection State from UserDefaults.
 
 Also, because previously opened tabs are persisted in UserDefaults,
 they should be recovered some way later. To recover new tab types you need to add
-a case for ``WorkspaceDocument/read(from:ofType:)`` to let it know how to recover your new tab type.
+a case for ``WorkspaceModel/read(from:ofType:)`` to let it know how to recover your new tab type.
 
 If you need to persist something as code editor tabs do for files, then you need to add
-functionality to persist changes to ``WorkspaceDocument/close()``.
+functionality to persist changes to ``WorkspaceModel/close()``.
 
 Also, you need to add a case for new tab type to
 ``WorkspaceSelectionState/getItemByTab(id:)``. It will allow to use

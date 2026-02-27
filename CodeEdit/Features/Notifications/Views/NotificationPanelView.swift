@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct NotificationPanelView: View {
-    @EnvironmentObject private var workspace: WorkspaceDocument
+    @Environment(WorkspaceModel.self) var workspace
     @Environment(\.controlActiveState)
     private var controlActiveState
 

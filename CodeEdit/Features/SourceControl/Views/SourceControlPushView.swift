@@ -8,10 +8,8 @@
 import SwiftUI
 
 struct SourceControlPushView: View {
-    @Environment(\.dismiss)
-    private var dismiss
-
-    @EnvironmentObject var sourceControlManager: SourceControlManager
+    @Environment(\.dismiss) private var dismiss
+	@Bindable var sourceControlManager: RepositoryModel
 
     @State var loading: Bool = false
 

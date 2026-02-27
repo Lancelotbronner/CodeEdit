@@ -8,10 +8,8 @@
 import SwiftUI
 
 struct SourceControlPullView: View {
-    @Environment(\.dismiss)
-    private var dismiss
-
-    @EnvironmentObject var sourceControlManager: SourceControlManager
+    @Environment(\.dismiss) private var dismiss
+	@Bindable var sourceControlManager: RepositoryModel
 
     let gitConfig = GitConfigClient(shellClient: currentWorld.shellClient)
 

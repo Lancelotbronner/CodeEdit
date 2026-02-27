@@ -9,10 +9,11 @@ import SwiftUI
 import Combine
 
 struct TasksCommands: Commands {
-    @UpdatingWindowController var windowController: CodeEditWindowController?
+	@Environment(\.openWindow) private var openWindow
+	@FocusedValue(\.workspace) private var workspace
 
     var taskManager: TaskManager? {
-        windowController?.workspace?.taskManager
+        workspace?.taskManager
     }
 
     @State private var activeTaskStatus: CETaskStatus = .notRunning
@@ -38,11 +39,14 @@ struct TasksCommands: Commands {
                 taskManager?.terminateActiveTask()
             }
             .keyboardShortcut(".")
-            .onChange(of: windowController) { _, _ in
+			//TODO: reimplement
+			/*
+			.onChange(of: taskManagerListener) { _, _ in
                 taskManagerListener = taskManager?.objectWillChange.sink {
                     updateStatusListener()
                 }
             }
+			 */
             .disabled(activeTaskStatus != .running)
 
             Button("Show \(selectedTaskName) Output") {
@@ -64,7 +68,7 @@ struct TasksCommands: Commands {
 
                 if taskManager?.availableTasks.isEmpty ?? true {
                     Button("Create Tasks") {
-                        openSettings()
+						openWindow(sceneID: .workspaceSettings)
                     }
                 }
             } label: {
@@ -73,9 +77,9 @@ struct TasksCommands: Commands {
             .disabled(taskManager?.availableTasks.isEmpty == true)
 
             Button("Manage Tasks...") {
-                openSettings()
+				openWindow(sceneID: .workspaceSettings)
             }
-            .disabled(windowController == nil)
+            .disabled(workspace == nil)
         }
     }
 
@@ -93,7 +97,7 @@ struct TasksCommands: Commands {
     }
 
     private func showOutput() {
-        guard let utilityAreaModel = windowController?.workspace?.utilityAreaModel else {
+        guard let utilityAreaModel = workspace?.utilityAreaModel else {
             return
         }
         if utilityAreaModel.isCollapsed {
@@ -102,13 +106,5 @@ struct TasksCommands: Commands {
         }
         utilityAreaModel.selectedTab = .debugConsole // Switch to the correct tab
         taskManager?.taskShowingOutput = taskManager?.selectedTaskID // Switch to the selected task
-    }
-
-    private func openSettings() {
-        NSApp.sendAction(
-            #selector(CodeEditWindowController.openWorkspaceSettings(_:)),
-            to: windowController,
-            from: nil
-        )
     }
 }

@@ -1,5 +1,5 @@
 //
-//  WorkspaceDocument+SearchState+FindTests.swift
+//  WorkspaceModel+SearchState+FindTests.swift
 //  CodeEditTests
 //
 //  Created by Tommy Ludwig on 26.01.24.
@@ -11,11 +11,11 @@ import XCTest
 final class FindTests: XCTestCase {
     private var directory: URL!
     private var files: [CEWorkspaceFile] = []
-    private var mockWorkspace: WorkspaceDocument!
-    private var searchState: WorkspaceDocument.SearchState!
+    private var mockWorkspace: WorkspaceModel!
+    private var searchState: WorkspaceModel.SearchState!
 
     // MARK: - Setup
-    /// A mock WorkspaceDocument is created
+    /// A mock WorkspaceModel is created
     /// 3 mock files are added to the index
     /// which will be removed in the teardown function
     override func setUp() async throws {
@@ -30,7 +30,7 @@ final class FindTests: XCTestCase {
         try? FileManager.default.removeItem(at: directory)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
 
-        mockWorkspace = try await WorkspaceDocument(for: directory, withContentsOf: directory, ofType: "")
+        mockWorkspace = try await WorkspaceModel(for: directory, withContentsOf: directory, ofType: "")
         searchState = await mockWorkspace.searchState
 
         // Add a few files
@@ -137,7 +137,7 @@ final class FindTests: XCTestCase {
         XCTAssertEqual(searchState.getRegexPattern(query), "\\b@\\(test\\. !\\*#Query\\b")
     }
 
-    /// Tests the search functionality of the `WorkspaceDocument.SearchState` and `SearchIndexer`.
+    /// Tests the search functionality of the `WorkspaceModel.SearchState` and `SearchIndexer`.
     func testSearch() async {
         await searchState.search("Ipsum")
         // Wait for the first search expectation to be fulfilled

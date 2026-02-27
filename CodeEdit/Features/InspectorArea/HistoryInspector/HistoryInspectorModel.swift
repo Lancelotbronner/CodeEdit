@@ -8,7 +8,7 @@
 import Foundation
 
 final class HistoryInspectorModel: ObservableObject {
-    private(set) var sourceControlManager: SourceControlManager?
+    private(set) var sourceControlManager: RepositoryModel?
 
     /// The base URL of the workspace
     private(set) var workspaceURL: URL?
@@ -19,7 +19,7 @@ final class HistoryInspectorModel: ObservableObject {
     /// The selected branch from the GitClient
     @Published var commitHistory: [GitCommit] = []
 
-    func setWorkspace(sourceControlManager: SourceControlManager?) async {
+    func setWorkspace(sourceControlManager: RepositoryModel?) async {
         self.sourceControlManager = sourceControlManager
         await updateCommitHistory()
     }

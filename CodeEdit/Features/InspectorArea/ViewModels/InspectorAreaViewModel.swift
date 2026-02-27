@@ -7,10 +7,11 @@
 
 import Foundation
 
-class InspectorAreaViewModel: ObservableObject {
-    @Published var selectedTab: InspectorTab? = .file
+@Observable
+final class InspectorAreaViewModel {
+    var selectedTab: InspectorTab? = .file
     /// The tab bar items in the Inspector
-    @Published var tabItems: [InspectorTab] = []
+    var tabItems: [InspectorTab] = []
 
     func setInspectorTab(tab newTab: InspectorTab) {
         selectedTab = newTab

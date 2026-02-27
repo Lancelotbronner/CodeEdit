@@ -18,7 +18,7 @@ struct SourceControlNavigatorHistoryView: View {
     @AppSettings(\.sourceControl.git.showMergeCommitsPerFileLog)
     var showMergeCommitsPerFileLog
 
-    @EnvironmentObject var sourceControlManager: SourceControlManager
+    @Environment(RepositoryModel.self) var sourceControlManager
 
     @State var commitHistoryStatus: Status = .loading
     @State var commitHistory: [GitCommit] = []
@@ -40,7 +40,7 @@ struct SourceControlNavigatorHistoryView: View {
                 commitHistoryStatus = .ready
             }
         } catch {
-            sourceControlManager.logger.log("Failed to load commit history: \(error)")
+            RepositoryModel.logger.log("Failed to load commit history: \(error)")
             await MainActor.run {
                 commitHistory = []
                 commitHistoryStatus = .error(error: error)

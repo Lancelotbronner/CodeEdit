@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct SourceControlNavigatorChangesCommitView: View {
-    @EnvironmentObject var sourceControlManager: SourceControlManager
+	@Environment(WorkspaceModel.self) var workspace
+    @Environment(RepositoryModel.self) var sourceControlManager
     @State private var message: String = ""
     @State private var details: String = ""
     @State private var ammend: Bool = false
@@ -87,7 +88,7 @@ struct SourceControlNavigatorChangesCommitView: View {
                             Task {
                                 self.isCommiting = true
                                 do {
-                                    try await sourceControlManager.commit(message: message, details: details)
+									try await sourceControlManager.commit(message: message, details: details, in: workspace)
                                     self.message = ""
                                     self.details = ""
                                 } catch {
@@ -108,7 +109,7 @@ struct SourceControlNavigatorChangesCommitView: View {
                         Task {
                             self.isCommiting = true
                             do {
-                                try await sourceControlManager.commit(message: message, details: details)
+								try await sourceControlManager.commit(message: message, details: details, in: workspace)
                                 self.message = ""
                                 self.details = ""
                             } catch {
@@ -141,7 +142,7 @@ struct SourceControlNavigatorChangesCommitView: View {
                 $0.stagedStatus == .none ? $0.fileURL : nil
             })
         } catch {
-            sourceControlManager.logger.error("Failed to stage all files: \(error)")
+			RepositoryModel.logger.error("Failed to stage all files: \(error)")
         }
     }
 
@@ -152,7 +153,7 @@ struct SourceControlNavigatorChangesCommitView: View {
                 sourceControlManager.changedFiles.map { $0.fileURL }
             )
         } catch {
-            sourceControlManager.logger.error("Failed to reset all files: \(error)")
+            RepositoryModel.logger.error("Failed to reset all files: \(error)")
         }
     }
 }

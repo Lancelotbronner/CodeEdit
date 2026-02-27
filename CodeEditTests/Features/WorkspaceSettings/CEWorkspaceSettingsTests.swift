@@ -10,7 +10,7 @@ import Testing
 @testable import CodeEdit
 
 struct CEWorkspaceSettingsTests {
-    let settings: CEWorkspaceSettings = CEWorkspaceSettings(workspaceURL: URL(filePath: "/"))
+    let settings: WorkspaceSettingsManager = WorkspaceSettingsManager(workspaceURL: URL(filePath: "/"))
 
     @Test
     func settingsURLNoSpace() async throws {

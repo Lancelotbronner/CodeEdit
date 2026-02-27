@@ -8,18 +8,17 @@
 import SwiftUI
 
 struct EditCETaskView: View {
-    @Environment(\.dismiss)
-    var dismiss
+    @Environment(\.dismiss) var dismiss
 
-    @EnvironmentObject var workspaceSettingsManager: CEWorkspaceSettings
-    @EnvironmentObject var taskManager: TaskManager
+    let workspaceSettingsManager: WorkspaceSettingsManager
+    var taskManager: TaskManager
     @ObservedObject var task: CETask
 
     let selectedTaskIndex: Int
 
     var body: some View {
         VStack(spacing: 0) {
-            CETaskFormView(task: task)
+			CETaskFormView(workspaceSettingsManager: workspaceSettingsManager, task: task)
             Divider()
             HStack {
                 Button(role: .destructive) {

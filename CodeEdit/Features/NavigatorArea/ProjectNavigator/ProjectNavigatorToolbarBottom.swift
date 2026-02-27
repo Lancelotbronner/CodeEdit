@@ -8,16 +8,12 @@
 import SwiftUI
 
 struct ProjectNavigatorToolbarBottom: View {
-    @Environment(\.controlActiveState)
-    private var activeState
-
-    @Environment(\.colorScheme)
-    private var colorScheme
-
-    @EnvironmentObject var workspace: WorkspaceDocument
-    @EnvironmentObject var editorManager: EditorManager
+    @Environment(\.controlActiveState) private var activeState
+    @Environment(\.colorScheme) private var colorScheme
+	@Environment(EditorManager.self) private var editorManager
 
     @State var recentsFilter: Bool = false
+	@Bindable var workspace: WorkspaceModel
 
     var body: some View {
         HStack(spacing: 5) {
@@ -107,7 +103,7 @@ struct ProjectNavigatorToolbarBottom: View {
                         toFile: rootFile
                     ) {
                         workspace.listenerModel.highlightedFileItem = newFile
-                        workspace.editorManager?.openTab(item: newFile)
+						workspace.editorManager.openTab(item: newFile)
                     }
                 } catch {
                     let alert = NSAlert(error: error)

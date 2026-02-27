@@ -9,22 +9,20 @@ import SwiftUI
 
 /// A view that shows the activity bar and the current status of any executed task
 struct ActivityViewer: View {
-    @Environment(\.colorScheme)
-    var colorScheme
+    @Environment(\.colorScheme) var colorScheme
 
     var workspaceFileManager: CEWorkspaceFileManager?
 
     @ObservedObject var taskNotificationHandler: TaskNotificationHandler
-    @ObservedObject var workspaceSettingsManager: CEWorkspaceSettings
+    let workspaceSettingsManager: WorkspaceSettingsManager?
 
-    // TODO: try to get this from the envrionment
-    @ObservedObject var taskManager: TaskManager
+    var taskManager: TaskManager?
 
     init(
         workspaceFileManager: CEWorkspaceFileManager?,
-        workspaceSettingsManager: CEWorkspaceSettings,
+        workspaceSettingsManager: WorkspaceSettingsManager?,
         taskNotificationHandler: TaskNotificationHandler,
-        taskManager: TaskManager
+        taskManager: TaskManager?
     ) {
         self.workspaceFileManager = workspaceFileManager
         self.workspaceSettingsManager = workspaceSettingsManager
@@ -73,7 +71,9 @@ struct ActivityViewer: View {
                 workspaceFileManager: workspaceFileManager
             )
 
-            TaskDropDownView(taskManager: taskManager)
+			if let taskManager {
+				TaskDropDownView(taskManager: taskManager)
+			}
 
             Spacer(minLength: 0)
 

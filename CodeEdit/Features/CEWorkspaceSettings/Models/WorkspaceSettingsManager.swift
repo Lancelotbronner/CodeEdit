@@ -9,8 +9,9 @@ import SwiftUI
 import Combine
 
 /// The CodeEdit workspace settings model.
-final class CEWorkspaceSettings: ObservableObject {
-    @Published public var settings: CEWorkspaceSettingsData = .init()
+@Observable
+final class WorkspaceSettingsManager {
+    public var settings: WorkspaceSettings = .init()
 
     private var storeTask: AnyCancellable?
     private let fileManager = FileManager.default
@@ -25,12 +26,18 @@ final class CEWorkspaceSettings: ObservableObject {
         folderURL = workspaceURL.appending(path: ".codeedit", directoryHint: .isDirectory)
         loadSettings()
 
+		withContinuousObservationTracking { [weak self] in
+			try? self?.savePreferences()
+		}
+		//TODO: reimplement throttle
+		/*
         storeTask = $settings
             .receive(on: DispatchQueue.main)
             .throttle(for: 2.0, scheduler: RunLoop.main, latest: true)
             .sink { _ in
                 try? self.savePreferences()
             }
+		 */
     }
 
     func cleanUp() {
@@ -46,7 +53,7 @@ final class CEWorkspaceSettings: ObservableObject {
     private func loadSettings() {
         guard fileManager.fileExists(atPath: settingsURL.path),
               let json = try? Data(contentsOf: settingsURL),
-              let prefs = try? JSONDecoder().decode(CEWorkspaceSettingsData.self, from: json)
+              let prefs = try? JSONDecoder().decode(WorkspaceSettings.self, from: json)
         else { return }
         self.settings = prefs
     }
@@ -54,7 +61,7 @@ final class CEWorkspaceSettings: ObservableObject {
     /// Save``CEWorkspaceSettingsManager`` model to `.codeedit/settings.json`
     func savePreferences() throws {
         // If the user doesn't have any settings to save, don't save them.
-        guard !settings.isEmpty() else {
+        guard !settings.isEmpty else {
             // Settings is empty, remove the file & directory if it's empty.
             if fileManager.fileExists(atPath: settingsURL.path()) {
                 try fileManager.removeItem(at: settingsURL)

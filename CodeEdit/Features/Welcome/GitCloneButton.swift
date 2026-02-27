@@ -9,11 +9,10 @@ import SwiftUI
 import WelcomeWindow
 
 struct GitCloneButton: View {
-
+	@Environment(\.openDocument) private var openDocument
+	@Environment(\.dismissWindow) private var dismissWindow
     @State private var showGitClone = false
     @State private var showCheckoutBranchItem: URL?
-
-    var dismissWindow: () -> Void
 
     var body: some View {
         WelcomeButton(
@@ -29,7 +28,8 @@ struct GitCloneButton: View {
                     showCheckoutBranchItem = url
                 },
                 openDocument: { url in
-                    CodeEditDocumentController.shared.openDocument(at: url, onCompletion: { dismissWindow() })
+					Task { try await openDocument(at: url) }
+					dismissWindow()
                 }
             )
         }
@@ -37,7 +37,8 @@ struct GitCloneButton: View {
             GitCheckoutBranchView(
                 repoLocalPath: url,
                 openDocument: { url in
-                    CodeEditDocumentController.shared.openDocument(at: url, onCompletion: { dismissWindow() })
+					Task { try await openDocument(at: url) }
+					dismissWindow()
                 }
             )
         }

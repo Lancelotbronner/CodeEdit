@@ -11,40 +11,37 @@ import OSLog
 
 /// This class is used to perform git functions such as fetch, pull, add/remove of changes, commit, push, etc.
 /// It also stores remotes, branches, current changes, stashes, and commits
-final class SourceControlManager: ObservableObject {
-    let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "", category: "SourceControlManager")
+@Observable
+final class RepositoryModel {
+    static let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "", category: "SourceControlManager")
 
     let gitClient: GitClient
 
-    /// The base URL of the workspace
-    let workspaceURL: URL
-
-    let editorManager: EditorManager
-    weak var fileManager: CEWorkspaceFileManager?
+	var url: URL { gitClient.directoryURL }
 
     /// A list of changed files
-    @Published var changedFiles: [GitChangedFile] = []
+    var changedFiles: [GitChangedFile] = []
 
     /// Current branch
-    @Published var currentBranch: GitBranch?
+    var currentBranch: GitBranch?
 
     /// All branches, local and remote
-    @Published var branches: [GitBranch] = []
+    var branches: [GitBranch] = []
 
     /// All remotes
-    @Published var remotes: [GitRemote] = []
+    var remotes: [GitRemote] = []
 
     /// All stashed entries
-    @Published var stashEntries: [GitStashEntry] = []
+    var stashEntries: [GitStashEntry] = []
 
     /// Number of unsynced commits with remote in current branch
-    @Published var numberOfUnsyncedCommits: (ahead: Int, behind: Int) = (ahead: 0, behind: 0)
+    var numberOfUnsyncedCommits: (ahead: Int, behind: Int) = (ahead: 0, behind: 0)
 
     /// Is project a git repository
-    @Published var isGitRepository: Bool = false
+    var isGitRepository: Bool = false
 
     /// Is the push sheet presented
-    @Published var pushSheetIsPresented: Bool = false {
+    var pushSheetIsPresented: Bool = false {
         didSet {
             self.operationBranch = nil
             self.operationRebase = false
@@ -54,7 +51,7 @@ final class SourceControlManager: ObservableObject {
     }
 
     /// Is the pull sheet presented
-    @Published var pullSheetIsPresented: Bool = false {
+    var pullSheetIsPresented: Bool = false {
         didSet {
             self.operationBranch = nil
             self.operationRebase = false
@@ -64,46 +61,46 @@ final class SourceControlManager: ObservableObject {
     }
 
     /// Is the fetch sheet presented
-    @Published var fetchSheetIsPresented: Bool = false
+    var fetchSheetIsPresented: Bool = false
 
     /// Is the stash sheet presented
-    @Published var stashSheetIsPresented: Bool = false
+    var stashSheetIsPresented: Bool = false
 
     /// Is the remote sheet presented
-    @Published var addExistingRemoteSheetIsPresented: Bool = false
+    var addExistingRemoteSheetIsPresented: Bool = false
 
     /// Branch selected for source control operations
-    @Published var operationBranch: GitBranch?
+    var operationBranch: GitBranch?
 
     /// Remote selected for source control operations
-    @Published var operationRemote: GitRemote?
+    var operationRemote: GitRemote?
 
     /// Rebase boolean set for source control operations
-    @Published var operationRebase: Bool = false
+    var operationRebase: Bool = false
 
     /// Force boolean set for source control operations
-    @Published var operationForce: Bool = false
+    var operationForce: Bool = false
 
     /// Include tags boolean set for source control operations
-    @Published var operationIncludeTags: Bool = false
+    var operationIncludeTags: Bool = false
 
     /// Branch to switch to
-    @Published var switchToBranch: GitBranch?
+    var switchToBranch: GitBranch?
 
     /// Is discard all alert presented
-    @Published var discardAllAlertIsPresented: Bool = false
+    var discardAllAlertIsPresented: Bool = false
 
     /// Is no changes to stage alert presented
-    @Published var noChangesToStageAlertIsPresented: Bool = false
+    var noChangesToStageAlertIsPresented: Bool = false
 
     /// Is no changes to unstage alert presented
-    @Published var noChangesToUnstageAlertIsPresented: Bool = false
+    var noChangesToUnstageAlertIsPresented: Bool = false
 
     /// Is no changes to stash alert presented
-    @Published var noChangesToStashAlertIsPresented: Bool = false
+    var noChangesToStashAlertIsPresented: Bool = false
 
     /// Is no changes to discard alert presented
-    @Published var noChangesToDiscardAlertIsPresented: Bool = false
+    var noChangesToDiscardAlertIsPresented: Bool = false
 
     var orderedLocalBranches: [GitBranch] {
         var orderedBranches: [GitBranch] = [currentBranch].compactMap { $0 }
@@ -114,13 +111,15 @@ final class SourceControlManager: ObservableObject {
     }
 
     init(
-        workspaceURL: URL,
-        editorManager: EditorManager
+		for client: GitClient
     ) {
-        self.workspaceURL = workspaceURL
-        self.editorManager = editorManager
-        gitClient = GitClient(directoryURL: workspaceURL, shellClient: currentWorld.shellClient)
+        gitClient = client
     }
+
+	convenience init(at url: URL) {
+		let client = GitClient(directoryURL: url, shellClient: currentWorld.shellClient)
+		self.init(for: client)
+	}
 
     /// Show alert for error
     func showAlertForError(title: String, error: Error) async {

@@ -8,10 +8,9 @@
 import SwiftUI
 
 internal struct StatusBarToggleUtilityAreaButton: View {
-    @Environment(\.controlActiveState)
-    var controlActiveState
+    @Environment(\.controlActiveState) var controlActiveState
 
-    @EnvironmentObject private var utilityAreaViewModel: UtilityAreaViewModel
+    let utilityAreaViewModel: UtilityAreaViewModel
 
     internal var body: some View {
         Button {

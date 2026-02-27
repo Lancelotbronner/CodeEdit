@@ -19,8 +19,8 @@ import SwiftUI
 /// host a terminal or additional debug information
 ///
 struct StatusBarView: View {
-    @Environment(\.controlActiveState)
-    private var controlActive
+    @Environment(\.controlActiveState) private var controlActive
+	let utilityAreaViewModel: UtilityAreaViewModel
 
     static let height = 28.0
 
@@ -38,9 +38,9 @@ struct StatusBarView: View {
 //            StatusBarDivider()
             Spacer()
             StatusBarFileInfoView()
-            StatusBarCursorPositionLabel()
+			StatusBarCursorPositionLabel(utilityAreaViewModel: utilityAreaViewModel)
             StatusBarDivider()
-            StatusBarToggleUtilityAreaButton()
+			StatusBarToggleUtilityAreaButton(utilityAreaViewModel: utilityAreaViewModel)
         }
         .padding(.horizontal, 10)
         .cursor(.resizeUpDown)

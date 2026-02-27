@@ -33,7 +33,7 @@ class EditorInstance: ObservableObject, Hashable {
 
     // MARK: - Init
 
-    init(workspace: WorkspaceDocument?, file: CEWorkspaceFile, cursorPositions: [CursorPosition]? = nil) {
+    init(workspace: WorkspaceModel?, file: CEWorkspaceFile, cursorPositions: [CursorPosition]? = nil) {
         self.file = file
         let url = file.url
         let editorState = EditorStateRestoration.shared?.restorationState(for: url)
@@ -70,7 +70,7 @@ class EditorInstance: ObservableObject, Hashable {
 
     // MARK: - Find/Replace Listeners
 
-    func listenToFindText(workspace: WorkspaceDocument?) {
+    func listenToFindText(workspace: WorkspaceModel?) {
         workspace?.searchState?.$searchQuery
             .receive(on: RunLoop.main)
             .sink { [weak self] newQuery in
@@ -90,7 +90,7 @@ class EditorInstance: ObservableObject, Hashable {
             .store(in: &cancellables)
     }
 
-    func listenToReplaceText(workspace: WorkspaceDocument?) {
+    func listenToReplaceText(workspace: WorkspaceModel?) {
         workspace?.searchState?.$replaceText
             .receive(on: RunLoop.main)
             .sink { [weak self] newText in

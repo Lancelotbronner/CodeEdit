@@ -67,7 +67,7 @@ extension ProjectNavigatorMenu {
 
         /// Open the items in order.
         sortedItems.forEach { item in
-            workspace?.editorManager?.openTab(item: item)
+			workspace?.editorManager.openTab(item: item)
         }
     }
 
@@ -89,7 +89,7 @@ extension ProjectNavigatorMenu {
         do {
             if let newFile = try workspace?.workspaceFileManager?.addFile(fileName: "untitled", toFile: item) {
                 workspace?.listenerModel.highlightedFileItem = newFile
-                workspace?.editorManager?.openTab(item: newFile)
+				workspace?.editorManager.openTab(item: newFile)
             }
         } catch {
             let alert = NSAlert(error: error)
@@ -129,7 +129,7 @@ extension ProjectNavigatorMenu {
                     contents: clipBoardContent
                 ) {
                 workspace?.listenerModel.highlightedFileItem = newFile
-                workspace?.editorManager?.openTab(item: newFile)
+				workspace?.editorManager.openTab(item: newFile)
                 renameFile()
             }
         } catch {

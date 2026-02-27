@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct RemoteBranchPicker: View {
-    @EnvironmentObject var sourceControlManager: SourceControlManager
+    @Environment(RepositoryModel.self) var sourceControlManager
 
     @Binding var branch: GitBranch?
     @Binding var remote: GitRemote?

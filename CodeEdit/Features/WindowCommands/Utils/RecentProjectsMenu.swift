@@ -126,11 +126,12 @@ final class RecentProjectsMenu: NSObject, NSMenuDelegate {
     @objc
     private func recentProjectItemClicked(_ sender: NSMenuItem) {
         guard let projectURL = sender.representedObject as? URL else { return }
-        CodeEditDocumentController.shared.openDocument(
-            withContentsOf: projectURL,
-            display: true,
-            completionHandler: { _, _, _ in }
-        )
+		//TODO: reimplement
+//        CodeEditDocumentController.shared.openDocument(
+//            withContentsOf: projectURL,
+//            display: true,
+//            completionHandler: { _, _, _ in }
+//        )
     }
 
     @objc

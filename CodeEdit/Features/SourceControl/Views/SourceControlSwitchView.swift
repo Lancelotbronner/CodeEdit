@@ -11,8 +11,8 @@ struct SourceControlSwitchView: View {
     @Environment(\.dismiss)
     private var dismiss
 
-    @EnvironmentObject var sourceControlManager: SourceControlManager
-    @EnvironmentObject var workspace: WorkspaceDocument
+    @Environment(RepositoryModel.self) var sourceControlManager
+    @Environment(WorkspaceModel.self) var workspace
 
     var branch: GitBranch
 

@@ -11,7 +11,7 @@ struct EditorTabBarLeadingAccessories: View {
     @Environment(\.controlActiveState)
     private var activeState
 
-    @EnvironmentObject private var editorManager: EditorManager
+	@Environment(EditorManager.self) private var editorManager
     @EnvironmentObject private var editor: Editor
 
     @State private var otherEditor: Editor?
@@ -59,11 +59,8 @@ struct EditorTabBarLeadingAccessories: View {
         .padding(.horizontal, 5)
         .opacity(activeState != .inactive ? 1.0 : 0.5)
         .frame(maxHeight: .infinity) // Fill out vertical spaces.
-        .onAppear {
-            otherEditor = editorManager.editorLayout.findSomeEditor(except: editor)
-        }
-        .onReceive(editorManager.objectWillChange) { _ in
-            otherEditor = editorManager.editorLayout.findSomeEditor(except: editor)
-        }
+		.onChange(of: editorManager.editorLayout.findSomeEditor(except: editor), initial: true) { _, newValue in
+			otherEditor = newValue
+		}
     }
 }

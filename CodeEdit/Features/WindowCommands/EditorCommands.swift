@@ -9,13 +9,10 @@ import SwiftUI
 import CodeEditKit
 
 struct EditorCommands: Commands {
-
-    @UpdatingWindowController var windowController: CodeEditWindowController?
-    private var editor: Editor? {
-        windowController?.workspace?.editorManager?.activeEditor
-    }
+	@FocusedValue(\.workspace) private var workspace
 
     var body: some Commands {
+		let editor = workspace?.editorManager.activeEditor
         CommandMenu("Editor") {
             Menu("Structure") {
                 Button("Move line up") {

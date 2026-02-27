@@ -10,12 +10,9 @@ import SwiftUI
 struct FileCommands: Commands {
     static let recentProjectsMenu = RecentProjectsMenu()
 
-    @Environment(\.openWindow)
-    private var openWindow
-
-    @UpdatingWindowController var windowController
-
-    @FocusedObject var utilityAreaViewModel: UtilityAreaViewModel?
+    @Environment(\.openWindow) private var openWindow
+	@FocusedValue(\.workspace) private var workspace
+	@FocusedValue(\.utilityAreaViewModel) private var utilityAreaViewModel
 
     var body: some Commands {
         CommandGroup(replacing: .newItem) {
@@ -35,7 +32,8 @@ struct FileCommands: Commands {
                 Menu("Open Recent") { }
 
                 Button("Open Quickly") {
-                    NSApp.sendAction(#selector(CodeEditWindowController.openQuickly(_:)), to: nil, from: nil)
+					//TODO: reimplement Open Quickly
+//                    NSApp.sendAction(#selector(CodeEditWindowController.openQuickly(_:)), to: nil, from: nil)
                 }
                 .keyboardShortcut("o", modifiers: [.command, .shift])
             }
@@ -43,24 +41,26 @@ struct FileCommands: Commands {
 
         CommandGroup(replacing: .saveItem) {
             Button("Close Tab") {
-                if NSApp.target(forAction: #selector(CodeEditWindowController.closeCurrentTab(_:))) != nil {
-                    NSApp.sendAction(#selector(CodeEditWindowController.closeCurrentTab(_:)), to: nil, from: nil)
-                } else {
-                    NSApp.sendAction(#selector(NSWindow.performClose(_:)), to: NSApp.keyWindow, from: nil)
-                }
+				//TODO: reimplement Close Tab
+//                if NSApp.target(forAction: #selector(CodeEditWindowController.closeCurrentTab(_:))) != nil {
+//                    NSApp.sendAction(#selector(CodeEditWindowController.closeCurrentTab(_:)), to: nil, from: nil)
+//                } else {
+//                    NSApp.sendAction(#selector(NSWindow.performClose(_:)), to: NSApp.keyWindow, from: nil)
+//                }
             }
             .keyboardShortcut("w")
 
             Button("Close Editor") {
-                if NSApp.target(forAction: #selector(CodeEditWindowController.closeActiveEditor(_:))) != nil {
-                    NSApp.sendAction(
-                        #selector(CodeEditWindowController.closeActiveEditor(_:)),
-                        to: nil,
-                        from: nil
-                    )
-                } else {
-                    NSApp.sendAction(#selector(NSWindow.performClose(_:)), to: NSApp.keyWindow, from: nil)
-                }
+				//TODO: reimplement Close Editor
+//                if NSApp.target(forAction: #selector(CodeEditWindowController.closeActiveEditor(_:))) != nil {
+//                    NSApp.sendAction(
+//                        #selector(CodeEditWindowController.closeActiveEditor(_:)),
+//                        to: nil,
+//                        from: nil
+//                    )
+//                } else {
+//                    NSApp.sendAction(#selector(NSWindow.performClose(_:)), to: NSApp.keyWindow, from: nil)
+//                }
             }
             .keyboardShortcut("w", modifiers: [.control, .shift, .command])
 
@@ -73,9 +73,9 @@ struct FileCommands: Commands {
                 NSApp.sendAction(#selector(NSWindow.performClose(_:)), to: NSApp.keyWindow, from: nil)
             }
             .keyboardShortcut("w", modifiers: [.control, .option, .command])
-            .disabled(!(NSApplication.shared.keyWindow?.windowController is CodeEditWindowController))
+            .disabled(workspace == nil)
 
-            if let utilityAreaViewModel {
+			if let utilityAreaViewModel {
                 Button("Close Terminal") {
                     utilityAreaViewModel.removeTerminals(utilityAreaViewModel.selectedTerminals)
                 }
@@ -85,14 +85,15 @@ struct FileCommands: Commands {
             Divider()
 
             Button("Workspace Settings") {
-                NSApp.sendAction(#selector(CodeEditWindowController.openWorkspaceSettings(_:)), to: nil, from: nil)
+				openWindow(sceneID: .workspaceSettings)
             }
-            .disabled(windowController?.workspace == nil)
+            .disabled(workspace == nil)
 
             Divider()
 
             Button("Save") {
-                NSApp.sendAction(#selector(CodeEditWindowController.saveDocument(_:)), to: nil, from: nil)
+				//TODO: reimplement Save
+//                NSApp.sendAction(#selector(CodeEditWindowController.saveDocument(_:)), to: nil, from: nil)
             }
             .keyboardShortcut("s")
         }

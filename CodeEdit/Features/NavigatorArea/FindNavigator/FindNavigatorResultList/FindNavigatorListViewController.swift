@@ -9,7 +9,7 @@ import SwiftUI
 
 final class FindNavigatorListViewController: NSViewController {
 
-    public var workspace: WorkspaceDocument
+    public var workspace: WorkspaceModel
     public var selectedItem: Any?
 
     private var searchItems: [SearchResultModel] = []
@@ -44,7 +44,7 @@ final class FindNavigatorListViewController: NSViewController {
         self.scrollView.contentView.contentInsets = .init(top: 0, left: 0, bottom: 0, right: 0)
     }
 
-    init(workspace: WorkspaceDocument) {
+    init(workspace: WorkspaceModel) {
         self.workspace = workspace
         super.init(nibName: nil, bundle: nil)
     }
@@ -197,13 +197,13 @@ extension FindNavigatorListViewController: NSOutlineViewDelegate {
             let selectedMatch = self.selectedItem as? SearchResultMatchModel
             if selectedItem == nil || selectedMatch != item {
                 self.selectedItem = item
-                workspace.editorManager?.openTab(item: item.file)
+				workspace.editorManager.openTab(item: item.file)
             }
         } else if let item = outlineView.item(atRow: selectedIndex) as? SearchResultModel {
             let selectedFile = self.selectedItem as? SearchResultModel
             if selectedItem == nil || selectedFile != item {
                 self.selectedItem = item
-                workspace.editorManager?.openTab(item: item.file)
+				workspace.editorManager.openTab(item: item.file)
             }
         }
     }

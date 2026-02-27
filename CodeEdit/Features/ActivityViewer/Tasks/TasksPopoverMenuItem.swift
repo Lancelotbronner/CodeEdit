@@ -11,7 +11,7 @@ import SwiftUI
 ///         value that presented it initially.
 ///         See ``SwiftUI/View/instantPopover(isPresented:arrowEdge:content:)``
 struct TasksPopoverMenuItem: View {
-    @ObservedObject var taskManager: TaskManager
+    var taskManager: TaskManager
     var task: CETask
     var dismiss: () -> Void
 

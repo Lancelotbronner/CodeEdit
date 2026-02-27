@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct UtilityAreaView: View {
-    @EnvironmentObject private var utilityAreaViewModel: UtilityAreaViewModel
+    @Bindable var utilityAreaViewModel: UtilityAreaViewModel
 
     var body: some View {
         WorkspacePanelView(

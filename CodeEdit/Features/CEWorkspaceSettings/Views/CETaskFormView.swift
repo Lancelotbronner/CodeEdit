@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CETaskFormView: View {
-    @EnvironmentObject var workspaceSettingsManager: CEWorkspaceSettings
+	let workspaceSettingsManager: WorkspaceSettingsManager
     @ObservedObject var task: CETask
     @State private var selectedEnvID: UUID?
 

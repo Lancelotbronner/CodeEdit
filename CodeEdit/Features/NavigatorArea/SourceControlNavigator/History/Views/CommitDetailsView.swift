@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CommitDetailsView: View {
-    @EnvironmentObject var sourceControlManager: SourceControlManager
+    @Environment(RepositoryModel.self) var sourceControlManager
 
     @Binding var commit: GitCommit?
 

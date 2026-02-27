@@ -22,8 +22,11 @@ enum CodeFileError: Error {
     case fileTypeError
 }
 
-@objc(CodeFileDocument)
-final class CodeFileDocument: NSDocument, ObservableObject {
+final class CodeFileDocument: ReferenceFileDocument {
+	static let readableContentTypes = [UTType.item]
+
+	init() {}
+
     struct OpenOptions {
         let cursorPositions: [CursorPosition]
     }
@@ -66,6 +69,9 @@ final class CodeFileDocument: NSDocument, ObservableObject {
     /// Set up by ``LanguageServer``, conforms this type to ``LanguageServerDocument``.
     @Published var languageServerObjects: LanguageServerDocumentObjects<CodeFileDocument> = .init()
 
+	private var fileType: UTType?
+	var fileURL: URL?
+
     /// The type of data this file document contains.
     ///
     /// If its text content is not nil, a `text` UTType is returned.
@@ -76,12 +82,7 @@ final class CodeFileDocument: NSDocument, ObservableObject {
         if content != nil {
             return .text
         }
-
-        guard let fileType, let type = UTType(fileType) else {
-            return nil
-        }
-
-        return type
+		return fileType
     }
 
     /// Specify options for opening the file such as the initial cursor positions.
@@ -102,16 +103,21 @@ final class CodeFileDocument: NSDocument, ObservableObject {
 
     // MARK: - NSDocument
 
-    override static var autosavesInPlace: Bool {
+    static var autosavesInPlace: Bool {
         Settings.shared.preferences.general.isAutoSaveOn
     }
 
-    override var autosavingFileType: String? {
+    var autosavingFileType: UTType? {
         Settings.shared.preferences.general.isAutoSaveOn
             ? fileType
             : nil
     }
 
+	var isDocumentEdited: Bool {
+		true
+	}
+
+	/*
     override func makeWindowControllers() {
         let window = NSWindow(
             contentRect: NSRect(x: 0, y: 0, width: 750, height: 800),
@@ -135,22 +141,36 @@ final class CodeFileDocument: NSDocument, ObservableObject {
             window.center()
         }
     }
+	 */
 
     // MARK: - Data
 
-    override func data(ofType _: String) throws -> Data {
-        guard let sourceEncoding, let data = (content?.string as NSString?)?.data(using: sourceEncoding.nsValue) else {
-            Self.logger.error("Failed to encode contents to \(self.sourceEncoding.debugDescription)")
-            throw CodeFileError.failedToEncode
-        }
-        return data
-    }
+	struct Snapshot {
+		let data: Data
+	}
 
-    // MARK: - Read
+	nonisolated func snapshot(contentType: UTType) throws -> Snapshot {
+		guard let sourceEncoding, let data = (content?.string as NSString?)?.data(using: sourceEncoding.nsValue) else {
+			Self.logger.error("Failed to encode contents to \(self.sourceEncoding.debugDescription)")
+			throw CodeFileError.failedToEncode
+		}
+		return Snapshot(data: data)
+	}
+	
+	nonisolated func fileWrapper(snapshot: Snapshot, configuration: WriteConfiguration) throws -> FileWrapper {
+		FileWrapper(regularFileWithContents: snapshot.data)
+	}
+	
+	// MARK: - Read
+	
+	/// This function is used for decoding files.
+	/// It should not throw error as unsupported files can still be opened by QLPreviewView.
+	nonisolated init(configuration: ReadConfiguration) throws {
+		guard
+			configuration.file.isRegularFile,
+			let data = configuration.file.regularFileContents
+		else { return }
 
-    /// This function is used for decoding files.
-    /// It should not throw error as unsupported files can still be opened by QLPreviewView.
-    override func read(from data: Data, ofType _: String) throws {
         var nsString: NSString?
         let rawEncoding = NSString.stringEncoding(
             for: data,
@@ -168,7 +188,8 @@ final class CodeFileDocument: NSDocument, ObservableObject {
         }
         self.sourceEncoding = validEncoding
         if let content {
-            registerContentChangeUndo(fileURL: fileURL, nsString: nsString, content: content)
+			//TODO: register content change with undoManager
+//            registerContentChangeUndo(fileURL: fileURL, nsString: nsString, content: content)
             content.mutableString.setString(nsString as String)
         } else {
             self.content = NSTextStorage(string: nsString as String)
@@ -198,9 +219,7 @@ final class CodeFileDocument: NSDocument, ObservableObject {
     // MARK: - Autosave
 
     /// Triggered when change occurred
-    override func updateChangeCount(_ change: NSDocument.ChangeType) {
-        super.updateChangeCount(change)
-
+    func updateChangeCount(_ change: NSDocument.ChangeType) {
         if CodeFileDocument.autosavesInPlace {
             return
         }
@@ -209,9 +228,7 @@ final class CodeFileDocument: NSDocument, ObservableObject {
     }
 
     /// Triggered when changes saved
-    override func updateChangeCount(withToken changeCountToken: Any, for saveOperation: NSDocument.SaveOperationType) {
-        super.updateChangeCount(withToken: changeCountToken, for: saveOperation)
-
+    func updateChangeCount(withToken changeCountToken: Any, for saveOperation: NSDocument.SaveOperationType) {
         if CodeFileDocument.autosavesInPlace {
             return
         }
@@ -219,31 +236,11 @@ final class CodeFileDocument: NSDocument, ObservableObject {
         self.isDocumentEditedSubject.send(self.isDocumentEdited)
     }
 
-    /// If ``hasUnautosavedChanges`` is `true` and an autosave has not already been scheduled, schedules a new autosave.
-    /// If ``hasUnautosavedChanges`` is `false`, cancels any scheduled timers and returns.
-    ///
-    /// All operations are done with the ``autosaveTimerLock`` acquired (including the scheduled autosave) to ensure
-    /// correct timing when scheduling or cancelling timers.
-    override func scheduleAutosaving() {
-        autosaveTimerLock.withLock {
-            if self.hasUnautosavedChanges {
-                guard autosaveTimer == nil else { return }
-                autosaveTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { [weak self] timer in
-                    self?.autosaveTimerLock.withLock {
-                        guard timer.isValid else { return }
-                        self?.autosaveTimer = nil
-                        self?.autosave(withDelegate: nil, didAutosave: nil, contextInfo: nil)
-                    }
-                }
-            } else {
-                autosaveTimer?.invalidate()
-                autosaveTimer = nil
-            }
-        }
-    }
-
     // MARK: - External Changes
 
+	//TODO: re-implement external changes
+
+	/*
     /// Handle the notification that the represented file item changed.
     ///
     /// We check if a file has been modified and can be read again to display to the user.
@@ -273,6 +270,7 @@ final class CodeFileDocument: NSDocument, ObservableObject {
 
         super.presentedItemDidChange()
     }
+	 */
 
     /// Helper to find the last modified date of the represented file item.
     /// 
@@ -285,36 +283,8 @@ final class CodeFileDocument: NSDocument, ObservableObject {
 
     // MARK: - Close
 
-    override func close() {
-        super.close()
+    func close() {
         NotificationCenter.default.post(name: Self.didCloseNotification, object: fileURL)
-    }
-
-    override func save(_ sender: Any?) {
-        guard let fileURL else {
-            super.save(sender)
-            return
-        }
-
-        do {
-            // Get parent directory for cases when entire folders were deleted – and recreate them as needed
-            let directory = fileURL.deletingLastPathComponent()
-            try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true, attributes: nil)
-
-            super.save(sender)
-        } catch {
-            presentError(error)
-        }
-    }
-
-    override func fileNameExtension(
-        forType typeName: String,
-        saveOperation: NSDocument.SaveOperationType
-    ) -> String? {
-        guard let fileTypeName = Self.fileTypeExtension[typeName] else {
-            return super.fileNameExtension(forType: typeName, saveOperation: saveOperation)
-        }
-        return fileTypeName
     }
 
     /// Determines the code language of the document.
@@ -332,8 +302,8 @@ final class CodeFileDocument: NSDocument, ObservableObject {
         )
     }
 
-    func findWorkspace() -> WorkspaceDocument? {
-        fileURL?.findWorkspace()
+    func findWorkspace() -> WorkspaceModel? {
+		fileURL.flatMap(WorkspaceManager.shared.workspace)
     }
 }
 

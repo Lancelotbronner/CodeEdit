@@ -78,8 +78,8 @@ final class LanguageServerCodeFileDocumentTests: XCTestCase {
         return (connection: bufferingConnection, server: server)
     }
 
-    func makeTestWorkspace() throws -> (WorkspaceDocument, CEWorkspaceFileManager) {
-        let workspace = WorkspaceDocument()
+    func makeTestWorkspace() throws -> (WorkspaceModel, CEWorkspaceFileManager) {
+        let workspace = WorkspaceModel()
         try workspace.read(from: tempTestDir, ofType: "")
         guard let fileManager = workspace.workspaceFileManager else {
             XCTFail("No File Manager")

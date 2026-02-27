@@ -22,9 +22,9 @@ struct EditorTabBarTrailingAccessories: View {
     @Environment(\.controlActiveState)
     private var activeState
 
-    @EnvironmentObject var workspace: WorkspaceDocument
+    @Environment(WorkspaceModel.self) var workspace
 
-    @EnvironmentObject private var editorManager: EditorManager
+    @Environment(EditorManager.self) private var editorManager
 
     @EnvironmentObject private var editor: Editor
 

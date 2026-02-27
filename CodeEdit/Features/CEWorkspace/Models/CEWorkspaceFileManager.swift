@@ -51,7 +51,7 @@ final class CEWorkspaceFileManager {
 
     let folderUrl: URL
     let workspaceItem: CEWorkspaceFile
-    weak var sourceControlManager: SourceControlManager?
+    weak var repository: RepositoryModel?
 
     /// Create a file  manager object with a root and a set of files to ignore.
     /// - Parameters:
@@ -62,24 +62,20 @@ final class CEWorkspaceFileManager {
         folderUrl: URL,
         ignoredFilesAndFolders: Set<String>,
         fileManager: FileManager = FileManager.default,
-        sourceControlManager: SourceControlManager?
+		in repository: RepositoryModel?
     ) {
         self.folderUrl = folderUrl
         self.ignoredFilesAndFolders = ignoredFilesAndFolders
+		self.repository = repository
 
         self.workspaceItem = CEWorkspaceFile(url: folderUrl)
         self.flattenedFileItems = [workspaceItem.id: workspaceItem]
-        self.sourceControlManager = sourceControlManager
         self.fileManager = fileManager
 
-        self.loadChildrenForFile(self.workspaceItem)
+		self.loadChildrenForFile(self.workspaceItem)
 
         fsEventStream = DirectoryEventStream(directory: self.folderUrl.path) { [weak self] events in
             self?.fileSystemEventReceived(events: events)
-        }
-
-        Task {
-            try await self.sourceControlManager?.validate()
         }
     }
 
@@ -116,7 +112,7 @@ final class CEWorkspaceFileManager {
                 currentURL.append(component: component)
 
                 if let file = flattenedFileItems[currentURL.relativePath], childrenMap[file.id] == nil {
-                    loadChildrenForFile(file)
+					loadChildrenForFile(file)
                 }
             }
 
@@ -144,7 +140,7 @@ final class CEWorkspaceFileManager {
         if file.isFolder {
             if childrenMap[file.id] == nil {
                 // Load the children
-                loadChildrenForFile(file)
+				loadChildrenForFile(file)
             }
 
             return childrenMap[file.id]?.compactMap { flattenedFileItems[$0] }
@@ -159,7 +155,7 @@ final class CEWorkspaceFileManager {
     /// for the file object, even an empty array.
     ///
     /// - Parameter file: The file item to load children for.
-    private func loadChildrenForFile(_ file: CEWorkspaceFile) {
+	private func loadChildrenForFile(_ file: CEWorkspaceFile) {
         guard let children = urlsForDirectory(file.resolvedURL) else {
             return
         }
@@ -171,7 +167,7 @@ final class CEWorkspaceFileManager {
         }
         childrenMap[file.id] = addedChildrenUrls
         Task {
-            await sourceControlManager?.refreshAllChangedFiles()
+            await repository?.refreshAllChangedFiles(in: self)
         }
     }
 

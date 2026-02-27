@@ -12,7 +12,7 @@ import SwiftUI
 
 struct EditorAreaFileView: View {
 
-    @EnvironmentObject private var editorManager: EditorManager
+    @Environment(EditorManager.self) private var editorManager
     @EnvironmentObject private var editor: Editor
     @EnvironmentObject private var statusBarViewModel: StatusBarViewModel
 

@@ -8,10 +8,10 @@
 import SwiftUI
 
 struct NavigateCommands: Commands {
+	@FocusedValue(\.workspace) private var workspace
 
-    @UpdatingWindowController var windowController: CodeEditWindowController?
     private var editor: Editor? {
-        windowController?.workspace?.editorManager?.activeEditor
+		workspace?.editorManager.activeEditor
     }
 
     var body: some Commands {

@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct SourceControlStashView: View {
-    @EnvironmentObject var sourceControlManager: SourceControlManager
-    @Environment(\.dismiss)
-    private var dismiss
+	@Environment(WorkspaceModel.self) var workspace
+    @Environment(RepositoryModel.self) var sourceControlManager
+    @Environment(\.dismiss) private var dismiss
 
     @State private var message: String = ""
     @State private var applyStashAfterOperation: Bool = false
@@ -82,7 +82,7 @@ struct SourceControlStashView: View {
     func submit() {
         Task {
             do {
-                try await sourceControlManager.stashChanges(message: message)
+				try await sourceControlManager.stashChanges(message: message, in: workspace)
                 message = ""
 
                 if sourceControlManager.pullSheetIsPresented
@@ -107,7 +107,7 @@ struct SourceControlStashView: View {
                                 userInfo: [NSLocalizedDescriptionKey: "Could not find last stash"]
                             )
                         }
-                        try await sourceControlManager.applyStashEntry(stashEntry: lastStashEntry)
+						try await sourceControlManager.applyStashEntry(stashEntry: lastStashEntry, in: workspace)
                     }
 
                     sourceControlManager.operationRemote = nil

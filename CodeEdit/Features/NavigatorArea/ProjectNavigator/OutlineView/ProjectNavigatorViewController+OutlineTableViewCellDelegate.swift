@@ -19,10 +19,10 @@ extension ProjectNavigatorViewController: OutlineTableViewCellDelegate {
             }
             outlineView.reloadItem(file.parent, reloadChildren: true)
             if !file.isFolder {
-                workspace?.editorManager?.editorLayout.closeAllTabs(of: file)
+				workspace?.editorManager.editorLayout.closeAllTabs(of: file)
             }
             workspace?.listenerModel.highlightedFileItem = newFile
-            workspace?.editorManager?.openTab(item: newFile)
+			workspace?.editorManager.openTab(item: newFile)
         } catch {
             let alert = NSAlert(error: error)
             alert.addButton(withTitle: "Dismiss")

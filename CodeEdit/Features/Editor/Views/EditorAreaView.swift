@@ -23,7 +23,7 @@ struct EditorAreaView: View {
 
     @FocusState.Binding var focus: Editor?
 
-    @EnvironmentObject private var editorManager: EditorManager
+    @Environment(EditorManager.self) private var editorManager
 
     @State var codeFile: (() -> CodeFileDocument?)?
 

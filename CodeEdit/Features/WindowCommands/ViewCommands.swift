@@ -24,17 +24,19 @@ struct ViewCommands: Commands {
     @FocusedBinding(\.inspectorVisibility)
     var inspectorVisibility
 
-    @UpdatingWindowController var windowController: CodeEditWindowController?
+	@FocusedValue(\.workspace) private var workspace
 
     var body: some Commands {
         CommandGroup(after: .toolbar) {
             Button("Show Command Palette") {
-                NSApp.sendAction(#selector(CodeEditWindowController.openCommandPalette(_:)), to: nil, from: nil)
+				//TODO: reimplement command palette
+//                NSApp.sendAction(#selector(CodeEditWindowController.openCommandPalette(_:)), to: nil, from: nil)
             }
             .keyboardShortcut("p", modifiers: [.shift, .command])
 
             Button("Open Search Navigator") {
-                NSApp.sendAction(#selector(CodeEditWindowController.openSearchNavigator(_:)), to: nil, from: nil)
+				//TODO: reimplement search navigator
+//                NSApp.sendAction(#selector(CodeEditWindowController.openSearchNavigator(_:)), to: nil, from: nil)
             }
             .keyboardShortcut("f", modifiers: [.shift, .command])
 
@@ -67,7 +69,7 @@ struct ViewCommands: Commands {
                 }
                 .keyboardShortcut("0", modifiers: [.command, .control])
             }
-            .disabled(windowController == nil)
+            .disabled(workspace == nil)
 
             Button("Customize Toolbar...") {
 
@@ -76,7 +78,8 @@ struct ViewCommands: Commands {
 
             Divider()
 
-            HideCommands()
+			//TODO: reimplement panel commands
+//            HideCommands()
 
             Divider()
 
@@ -88,15 +91,19 @@ struct ViewCommands: Commands {
 
             Divider()
 
-            if let model = windowController?.navigatorSidebarViewModel {
+			//TODO: Focused values for navigator and inspector models
+			/*
+            if let model = workspace?.navigatorSidebarViewModel {
                 Divider()
                 NavigatorCommands(model: model)
             }
+			 */
         }
     }
 }
 
 extension ViewCommands {
+	/*
     struct HideCommands: View {
         @UpdatingWindowController var windowController: CodeEditWindowController?
 
@@ -152,11 +159,12 @@ extension ViewCommands {
             .keyboardShortcut("H", modifiers: [.shift, .command])
         }
     }
+	 */
 }
 
 extension ViewCommands {
     struct NavigatorCommands: View {
-        @ObservedObject var model: NavigatorAreaViewModel
+        let model: NavigatorAreaViewModel
 
         var body: some View {
             Menu("Navigators", content: {

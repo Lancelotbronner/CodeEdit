@@ -10,10 +10,11 @@ import SwiftUI
 /// The view that displays the list of available terminals in the utility area.
 /// See ``UtilityAreaTerminalView`` for use.
 struct UtilityAreaTerminalSidebar: View {
-    @EnvironmentObject private var workspace: WorkspaceDocument
-    @EnvironmentObject private var utilityAreaViewModel: UtilityAreaViewModel
+    @Environment(WorkspaceModel.self) var workspace
+	@Environment(UtilityAreaViewModel.self) private var utilityAreaViewModel
 
     var body: some View {
+		@Bindable var utilityAreaViewModel = utilityAreaViewModel
         List(selection: $utilityAreaViewModel.selectedTerminals) {
             ForEach(utilityAreaViewModel.terminals, id: \.self.id) { terminal in
                 UtilityAreaTerminalTab(
@@ -29,7 +30,7 @@ struct UtilityAreaTerminalSidebar: View {
                 utilityAreaViewModel?.reorderTerminals(from: source, to: destination)
             }
         }
-        .focusedObject(utilityAreaViewModel)
+		.focusedValue(\.utilityAreaViewModel, utilityAreaViewModel)
         .listStyle(.automatic)
         .accentColor(.secondary)
         .contextMenu {

@@ -8,39 +8,38 @@
 import SwiftUI
 
 struct SourceControlNavigatorView: View {
-    @EnvironmentObject private var workspace: WorkspaceDocument
+    @Environment(WorkspaceModel.self) var workspace
+	@Environment(RepositoryModel.self) private var sourceControlManager
 
     @AppSettings(\.sourceControl.general.fetchRefreshServerStatus)
-    var fetchRefreshServerStatus
+	var fetchRefreshServerStatus
 
-    var body: some View {
-        if let sourceControlManager = workspace.workspaceFileManager?.sourceControlManager {
-            VStack(spacing: 0) {
-                SourceControlNavigatorTabs()
-                    .environmentObject(sourceControlManager)
-                    .task {
-                        do {
-                            while true {
-                                if fetchRefreshServerStatus {
-                                    try await sourceControlManager.fetch()
-                                }
-                                try await Task.sleep(for: .seconds(10))
-                            }
-                        } catch {
-                            // TODO: if source fetching fails, display message
-                        }
-                    }
-            }
-            .safeAreaInset(edge: .bottom, spacing: 0) {
-                SourceControlNavigatorToolbarBottom()
-                    .environmentObject(sourceControlManager)
-            }
-        }
-    }
+	var body: some View {
+		VStack(spacing: 0) {
+			SourceControlNavigatorTabs()
+				.environment(sourceControlManager)
+				.task {
+					do {
+						while true {
+							if fetchRefreshServerStatus {
+								try await sourceControlManager.fetch()
+							}
+							try await Task.sleep(for: .seconds(10))
+						}
+					} catch {
+						// TODO: if source fetching fails, display message
+					}
+				}
+		}
+		.safeAreaInset(edge: .bottom, spacing: 0) {
+			SourceControlNavigatorToolbarBottom()
+				.environment(sourceControlManager)
+		}
+	}
 }
 
 struct SourceControlNavigatorTabs: View {
-    @EnvironmentObject var sourceControlManager: SourceControlManager
+    @Environment(RepositoryModel.self) var sourceControlManager
     @State private var selectedSection: Int = 0
 
     var body: some View {

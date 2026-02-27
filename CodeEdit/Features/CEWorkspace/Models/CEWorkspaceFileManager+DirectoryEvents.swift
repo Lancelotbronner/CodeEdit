@@ -14,7 +14,7 @@ extension CEWorkspaceFileManager {
     /// This method may be called on a background thread, but all work done by this function will be queued on the main
     /// thread.
     /// - Parameter events: An array of events that occurred.
-    func fileSystemEventReceived(events: [DirectoryEventStream.Event]) {
+	func fileSystemEventReceived(events: [DirectoryEventStream.Event]) {
         DispatchQueue.main.async {
             var files: Set<CEWorkspaceFile> = []
             for event in events {
@@ -47,7 +47,7 @@ extension CEWorkspaceFileManager {
 
             if Settings.shared.preferences.sourceControl.general.sourceControlIsEnabled &&
                 Settings.shared.preferences.sourceControl.general.refreshStatusLocally {
-                self.handleGitEvents(events: events)
+				self.handleGitEvents(events: events)
             }
         }
     }
@@ -89,42 +89,42 @@ extension CEWorkspaceFileManager {
         // If changes were made to project OR files were staged, refresh changes
         if !notGitChanges.isEmpty || gitIndexChange != nil {
             Task {
-                await self.sourceControlManager?.refreshAllChangedFiles()
+				await self.repository?.refreshAllChangedFiles(in: self)
             }
         }
 
         // If changes were stashed, refresh stashed entries
         if gitStashChange != nil {
             Task {
-                try await self.sourceControlManager?.refreshStashEntries()
+                try await self.repository?.refreshStashEntries()
             }
         }
 
         // If branches were added or removed, refresh branches
         if gitBranchChange != nil {
             Task {
-                await self.sourceControlManager?.refreshBranches()
+                await self.repository?.refreshBranches()
             }
         }
 
         // If HEAD was changed, refresh the current branch
         if gitHeadChange != nil {
             Task {
-                await self.sourceControlManager?.refreshCurrentBranch()
+                await self.repository?.refreshCurrentBranch()
             }
         }
 
         // If git config changed, refresh remotes
         if gitConfigChange != nil {
             Task {
-                try await self.sourceControlManager?.refreshRemotes()
+                try await self.repository?.refreshRemotes()
             }
         }
 
         // If .git folder was added or removed, check if repository is valid
         if gitFolderChange != nil {
             Task {
-                try await self.sourceControlManager?.validate()
+                try await self.repository?.validate()
             }
         }
     }

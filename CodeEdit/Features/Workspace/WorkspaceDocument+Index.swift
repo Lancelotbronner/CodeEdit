@@ -1,5 +1,5 @@
 //
-//  WorkspaceDocument+Index.swift
+//  WorkspaceModel+Index.swift
 //  CodeEdit
 //
 //  Created by Tommy Ludwig on 02.01.24.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension WorkspaceDocument.SearchState {
+extension WorkspaceModel.SearchState {
     /// Adds the contents of the current workspace URL to the search index.
     /// That means that the contents of the workspace will be indexed and searchable.
     func addProjectToIndex() {

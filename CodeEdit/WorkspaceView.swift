@@ -9,11 +9,8 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 struct WorkspaceView: View {
-    @Environment(\.window.value)
-    private var window: NSWindow?
-
-    @Environment(\.colorScheme)
-    private var colorScheme
+    @Environment(\.window.value) private var window: NSWindow?
+    @Environment(\.colorScheme) private var colorScheme
 
     @FocusState var focusedEditor: Editor?
 
@@ -23,9 +20,9 @@ struct WorkspaceView: View {
     @AppSettings(\.sourceControl.general.sourceControlIsEnabled)
     var sourceControlIsEnabled
 
-    @EnvironmentObject private var workspace: WorkspaceDocument
-    @EnvironmentObject private var editorManager: EditorManager
-    @EnvironmentObject private var utilityAreaViewModel: UtilityAreaViewModel
+    @Environment(WorkspaceModel.self) var workspace
+    @Environment(EditorManager.self) private var editorManager
+    @Bindable var utilityAreaViewModel: UtilityAreaViewModel
 
     @StateObject private var themeModel: ThemeModel = .shared
 
@@ -39,96 +36,102 @@ struct WorkspaceView: View {
 
     private var keybindings: KeybindingManager =  .shared
 
+	init(utilityAreaViewModel: UtilityAreaViewModel) {
+		self.utilityAreaViewModel = utilityAreaViewModel
+	}
+
     var body: some View {
-        if workspace.workspaceFileManager != nil, let sourceControlManager = workspace.sourceControlManager {
-            VStack {
-                SplitViewReader { proxy in
-                    SplitView(axis: .vertical) {
-                        editorArea
-                        utilityAreaPlaceholder
-                    }
-                    .edgesIgnoringSafeArea(.top)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .overlay(alignment: .top) {
-                        utilityArea(proxy: proxy)
-                    }
-                    .overlay(alignment: .topTrailing) {
-                        NotificationPanelView()
-                    }
+		VStack {
+			SplitViewReader { proxy in
+				SplitView(axis: .vertical) {
+					editorArea
+					utilityAreaPlaceholder
+				}
+				.edgesIgnoringSafeArea(.top)
+				.frame(maxWidth: .infinity, maxHeight: .infinity)
+				.overlay(alignment: .top) {
+					utilityArea(proxy: proxy)
+				}
+				.overlay(alignment: .topTrailing) {
+					NotificationPanelView()
+				}
 
-                    // MARK: - Tab Focus Listeners
+				// MARK: - Tab Focus Listeners
 
-                    .onChange(of: editorManager.activeEditor) { _, newValue in
-                        focusedEditor = newValue
-                    }
-                    .onChange(of: focusedEditor) { _, newValue in
-                        /// Update active tab group only if the new one is not the same with it.
-                        if let newValue, editorManager.activeEditor != newValue {
-                            editorManager.activeEditor = newValue
-                        }
-                    }
+				.onChange(of: editorManager.activeEditor) { _, newValue in
+					focusedEditor = newValue
+				}
+				.onChange(of: focusedEditor) { _, newValue in
+					/// Update active tab group only if the new one is not the same with it.
+					if let newValue, editorManager.activeEditor != newValue {
+						editorManager.activeEditor = newValue
+					}
+				}
 
-                    // MARK: - Theme Color Scheme
+				// MARK: - Theme Color Scheme
 
-                    .task {
-                        themeModel.colorScheme = colorScheme
-                    }
-                    .onChange(of: colorScheme) { _, newValue in
-                        themeModel.colorScheme = newValue
-                        if matchAppearance {
-                            themeModel.selectedTheme = newValue == .dark
-                            ? themeModel.selectedDarkTheme
-                            : themeModel.selectedLightTheme
-                        }
-                    }
+				.task {
+					themeModel.colorScheme = colorScheme
+				}
+				.onChange(of: colorScheme) { _, newValue in
+					themeModel.colorScheme = newValue
+					if matchAppearance {
+						themeModel.selectedTheme = newValue == .dark
+						? themeModel.selectedDarkTheme
+						: themeModel.selectedLightTheme
+					}
+				}
 
-                    // MARK: - Source Control
+				// MARK: - Source Control
 
-                    .task {
-                        // Only refresh git data if source control is enabled
-                        guard sourceControlIsEnabled else { return }
-                        
-                        do {
-                            try await sourceControlManager.refreshRemotes()
-                            try await sourceControlManager.refreshStashEntries()
-                        } catch {
-                            await sourceControlManager.showAlertForError(
-                                title: "Error refreshing Git data",
-                                error: error
-                            )
-                        }
-                    }
-                    .onChange(of: sourceControlIsEnabled) { _, newValue in
-                        if newValue {
-                            Task {
-                                await sourceControlManager.refreshCurrentBranch()
-                            }
-                        } else {
-                            sourceControlManager.currentBranch = nil
-                        }
-                    }
+				.task {
+					// Only refresh git data if source control is enabled
+					guard sourceControlIsEnabled else { return }
 
-                    // MARK: - Window Will Close
+					do {
+						try await workspace.workspaceRepository?.refreshRemotes()
+						try await workspace.workspaceRepository?.refreshStashEntries()
+					} catch {
+						await workspace.workspaceRepository?.showAlertForError(
+							title: "Error refreshing Git data",
+							error: error
+						)
+					}
+				}
+				.onChange(of: sourceControlIsEnabled) { _, newValue in
+					if newValue {
+						Task {
+							await workspace.workspaceRepository?.refreshCurrentBranch()
+						}
+					} else {
+						workspace.workspaceRepository?.currentBranch = nil
+					}
+				}
 
-                    .onReceive(NotificationCenter.default.publisher(for: NSWindow.willCloseNotification)) { output in
-                        if let window = output.object as? NSWindow, self.window == window {
-                            workspace.addToWorkspaceState(
-                                key: .workspaceWindowSize,
-                                value: NSStringFromRect(window.frame)
-                            )
-                        }
-                    }
-                }
-            }
-            .background(EffectView(.contentBackground))
-            .background(WorkspaceSheets().environmentObject(sourceControlManager))
-            .onDrop(of: [.fileURL], isTargeted: nil) { providers in
-                _ = handleDrop(providers: providers)
-                return true
-            }
-            .accessibilityElement(children: .contain)
-            .accessibilityLabel("workspace area")
-        }
+				// MARK: - Window Will Close
+
+				.onReceive(NotificationCenter.default.publisher(for: NSWindow.willCloseNotification)) { output in
+					if let window = output.object as? NSWindow, self.window == window {
+						workspace.addToWorkspaceState(
+							key: .workspaceWindowSize,
+							value: NSStringFromRect(window.frame)
+						)
+					}
+				}
+			}
+		}
+		.background(EffectView(.contentBackground))
+		.background {
+			if let repository = workspace.workspaceRepository {
+				WorkspaceSheets(sourceControlManager: repository)
+			}
+		}
+		.onDrop(of: [.fileURL], isTargeted: nil) { providers in
+			_ = handleDrop(providers: providers)
+			return true
+		}
+		.accessibilityElement(children: .contain)
+		.accessibilityLabel("workspace area")
     }
 
     // MARK: - Editor Area
@@ -162,13 +165,13 @@ struct WorkspaceView: View {
     @ViewBuilder
     private func utilityArea(proxy: SplitViewProxy) -> some View {
         ZStack(alignment: .top) {
-            UtilityAreaView()
+			UtilityAreaView(utilityAreaViewModel: utilityAreaViewModel)
                 .frame(height: utilityAreaViewModel.isMaximized ? nil : drawerHeight)
                 .frame(maxHeight: utilityAreaViewModel.isMaximized ? .infinity : nil)
                 .padding(.top, utilityAreaViewModel.isMaximized ? statusbarHeight + 1 : 0)
                 .offset(y: utilityAreaViewModel.isMaximized ? 0 : editorsHeight + 1)
             VStack(spacing: 0) {
-                StatusBarView(proxy: proxy)
+				StatusBarView(utilityAreaViewModel: utilityAreaViewModel, proxy: proxy)
                 if utilityAreaViewModel.isMaximized {
                     PanelDivider()
                 }

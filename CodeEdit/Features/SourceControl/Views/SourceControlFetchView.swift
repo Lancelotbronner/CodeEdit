@@ -8,11 +8,9 @@
 import SwiftUI
 
 struct SourceControlFetchView: View {
-    @Environment(\.dismiss)
-    private var dismiss
-
-    @EnvironmentObject var sourceControlManager: SourceControlManager
-    @EnvironmentObject var workspace: WorkspaceDocument
+    @Environment(\.dismiss) private var dismiss
+	@Environment(RepositoryModel.self) var sourceControlManager
+    @Environment(WorkspaceModel.self) var workspace
 
     var projectName: String {
         workspace.workspaceFileManager?.folderUrl.lastPathComponent ?? "Empty"

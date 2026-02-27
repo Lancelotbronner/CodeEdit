@@ -15,8 +15,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "", category: "AppDelegate")
     private let updater = SoftwareUpdater()
 
-    @Environment(\.openWindow)
-    var openWindow
+    @Environment(\.openWindow) var openWindow
+	@Environment(\.newDocument) var newDocument
+	@Environment(\.openDocument) var openDocument
 
     @LazyService var lspService: LSPService
 
@@ -42,13 +43,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
                     let path = CommandLine.arguments[index+1]
                     let url = URL(fileURLWithPath: path)
 
-                    CodeEditDocumentController.shared.reopenDocument(
-                        for: url,
-                        withContentsOf: url,
-                        display: true
-                    ) { document, _, _ in
-                        document?.windowControllers.first?.synchronizeWindowTitleWithDocumentName()
-                    }
+					Task { try await self.openDocument(at: url) }
 
                     needToHandleOpen = false
                 }
@@ -93,9 +88,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
                 openWindow(sceneID: .welcome)
             }
         case .openPanel:
-            CodeEditDocumentController.shared.openDocument(self)
+			WorkspaceManager.shared.isImporterPresented = true
         case .newDocument:
-            CodeEditDocumentController.shared.newDocument(self)
+			newDocument(contentType: .text)
         }
     }
 
@@ -107,18 +102,19 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
             let line = file.count > 1 ? Int(file[1]) ?? 0 : 0
             let column = file.count > 2 ? Int(file[2]) ?? 1 : 1
 
-            CodeEditDocumentController.shared
-                .openDocument(withContentsOf: filePath, display: true) { document, _, error in
-                    if let error {
-                        NSAlert(error: error).runModal()
-                        return
-                    }
-                    if line > 0, let document = document as? CodeFileDocument {
-                        document.openOptions = CodeFileDocument.OpenOptions(
-                            cursorPositions: [CursorPosition(line: line, column: column > 0 ? column : 1)]
-                        )
-                    }
-                }
+			//TODO: reimplement
+//            CodeEditDocumentController.shared
+//                .openDocument(withContentsOf: filePath, display: true) { document, _, error in
+//                    if let error {
+//                        NSAlert(error: error).runModal()
+//                        return
+//                    }
+//                    if line > 0, let document = document as? CodeFileDocument {
+//                        document.openOptions = CodeFileDocument.OpenOptions(
+//                            cursorPositions: [CursorPosition(line: line, column: column > 0 ? column : 1)]
+//                        )
+//                    }
+//                }
         }
     }
 
@@ -139,21 +135,22 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     ///
     /// See ``terminateLanguageServers()`` and ``documentController(_:didCloseAll:contextInfo:)`` for deferring tasks.
     func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
-        let projects: [String] = CodeEditDocumentController.shared.documents
-            .compactMap { ($0 as? WorkspaceDocument)?.fileURL?.path }
+        let projects: [String] = WorkspaceManager.shared.workspaces
+			.compactMap(\.fileURL?.path)
 
         UserDefaults.standard.set(projects, forKey: AppDelegate.recoverWorkspacesKey)
 
-        let areAllDocumentsClean = CodeEditDocumentController.shared.documents.allSatisfy { !$0.isDocumentEdited }
-        guard areAllDocumentsClean else {
-            CodeEditDocumentController.shared.closeAllDocuments(
-                withDelegate: self,
-                didCloseAllSelector: #selector(documentController(_:didCloseAll:contextInfo:)),
-                contextInfo: nil
-            )
+		//TODO: reimplement
+//        let areAllDocumentsClean = WorkspaceManager.shared.workspaces.allSatisfy { !$0.isDocumentEdited }
+//        guard areAllDocumentsClean else {
+//            CodeEditDocumentController.shared.closeAllDocuments(
+//                withDelegate: self,
+//                didCloseAllSelector: #selector(documentController(_:didCloseAll:contextInfo:)),
+//                contextInfo: nil
+//            )
             // `documentController(_:didCloseAll:contextInfo:)` will call `terminateLanguageServers()`
-            return .terminateLater
-        }
+//            return .terminateLater
+//        }
 
         terminateTasks()
         terminateLanguageServers()
@@ -223,13 +220,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
 
             for filePath in files {
                 let fileURL = URL(fileURLWithPath: String(filePath))
-                CodeEditDocumentController.shared.reopenDocument(
-                    for: fileURL,
-                    withContentsOf: fileURL,
-                    display: true
-                ) { document, _, _ in
-                    document?.windowControllers.first?.synchronizeWindowTitleWithDocumentName()
-                }
+				Task { try await openDocument(at: fileURL) }
             }
 
             defaults.removeObject(forKey: "openInCEFiles")
@@ -295,9 +286,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
             isLoading: true
         )
 
-        let taskManagers = CodeEditDocumentController.shared.documents
-            .compactMap({ $0 as? WorkspaceDocument })
-            .compactMap({ $0.taskManager })
+		let taskManagers = WorkspaceManager.shared.workspaces
+			.compactMap(\.taskManager)
 
         if taskManagers.reduce(0, { $0 + $1.activeTasks.count }) > 0 {
             TaskNotificationHandler.postTask(action: .create, model: task)

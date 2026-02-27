@@ -10,32 +10,35 @@ import Foundation
 import DequeModule
 import os
 
-class EditorManager: ObservableObject {
-    let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "", category: "EditorManager")
+@Observable
+final class EditorManager {
+    static let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "", category: "EditorManager")
 
     /// The complete editor layout.
-    @Published var editorLayout: EditorLayout
+    var editorLayout: EditorLayout
 
-    @Published var isFocusingActiveEditor: Bool
+    var isFocusingActiveEditor = false
 
     /// The Editor with active focus.
-    @Published var activeEditor: Editor {
+    var activeEditor: Editor {
         didSet {
-            activeEditorHistory.prepend { [weak oldValue] in oldValue }
-            switchToActiveEditor()
+            activeEditorHistory.prepend(Weak(oldValue))
         }
     }
 
     /// History of last-used editors.
-    var activeEditorHistory: Deque<() -> Editor?> = []
+    var activeEditorHistory: Deque<Weak<Editor>> = []
 
-    /// notify listeners whenever tab selection changes on the active editor.
-    var tabBarTabIdSubject = PassthroughSubject<Editor.Tab?, Never>()
-    var cancellable: AnyCancellable?
+	var tabBarTabId: Editor.Tab? {
+		activeEditor.selectedTab
+	}
 
     // This caching mechanism is a temporary solution and is not optimized
-    @Published var updateCachedFlattenedEditors: Bool = true
+    var updateCachedFlattenedEditors: Bool = true
+
+	@ObservationIgnored
     var cachedFlettenedEditors: [Editor] = []
+
     var flattenedEditors: [Editor] {
         if updateCachedFlattenedEditors {
             cachedFlettenedEditors = self.getFlattened()
@@ -48,11 +51,10 @@ class EditorManager: ObservableObject {
 
     init() {
         let tab = Editor()
-        self.activeEditor = tab
-        self.activeEditorHistory.prepend { [weak tab] in tab }
-        self.editorLayout = .horizontal(.init(.horizontal, editorLayouts: [.one(tab)]))
-        self.isFocusingActiveEditor = false
-        switchToActiveEditor()
+		editorLayout = .horizontal(.init(.horizontal, editorLayouts: [.one(tab)]))
+        activeEditor = tab
+        activeEditorHistory.prepend(Weak(tab))
+        isFocusingActiveEditor = false
     }
 
     /// Initializes the editor manager's state to the "initial" state.
@@ -61,10 +63,9 @@ class EditorManager: ObservableObject {
     func initCleanState() {
         let tab = Editor()
         self.activeEditor = tab
-        self.activeEditorHistory.prepend { [weak tab] in tab }
+        self.activeEditorHistory.prepend(Weak(tab))
         self.editorLayout = .horizontal(.init(.horizontal, editorLayouts: [.one(tab)]))
         self.isFocusingActiveEditor = false
-        switchToActiveEditor()
     }
 
     /// Flattens the splitviews.
@@ -97,16 +98,6 @@ class EditorManager: ObservableObject {
         editor.openTab(file: item, asTemporary: asTemporary)
     }
 
-    /// bind active tap group to listen to file selection changes.
-    func switchToActiveEditor() {
-        cancellable?.cancel()
-        cancellable = nil
-        cancellable = activeEditor.$selectedTab
-            .sink { [weak self] tab in
-                self?.tabBarTabIdSubject.send(tab)
-            }
-    }
-
     // MARK: - Close Editor
 
     /// Close an editor and fix editor manager state, updating active editor, etc.
@@ -118,18 +109,17 @@ class EditorManager: ObservableObject {
         }
 
         flatten()
-        objectWillChange.send()
         updateCachedFlattenedEditors = true
     }
 
     /// Set a new active editor.
     /// - Parameter editor: The editor to exclude.
     func setNewActiveEditor(excluding editor: Editor) {
-        activeEditorHistory.removeAll { $0() == nil || $0() == editor }
+		activeEditorHistory.removeAll { $0.wrappedValue == nil || $0.wrappedValue == editor }
         if activeEditorHistory.isEmpty {
             activeEditor = findSomeEditor(excluding: editor)
         } else {
-            activeEditor = activeEditorHistory.removeFirst()()!
+			activeEditor = activeEditorHistory.removeFirst().wrappedValue!
         }
     }
 

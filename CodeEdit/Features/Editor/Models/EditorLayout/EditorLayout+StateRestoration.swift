@@ -12,7 +12,7 @@ import OrderedCollections
 extension EditorManager {
     /// Restores the tab manager from a captured state obtained using `saveRestorationState`
     /// - Parameter workspace: The workspace to retrieve state from.
-    func restoreFromState(_ workspace: WorkspaceDocument) {
+    func restoreFromState(_ workspace: WorkspaceModel) {
         defer {
             // No matter what, set the workspace on each editor. Even if we fail to read data.
             flattenedEditors.forEach { editor in
@@ -28,7 +28,7 @@ extension EditorManager {
             let state = try JSONDecoder().decode(EditorRestorationState.self, from: data)
 
             guard !state.groups.isEmpty else {
-                logger.warning("Empty Editor State found, restoring to clean editor state.")
+				Self.logger.warning("Empty Editor State found, restoring to clean editor state.")
                 initCleanState()
                 return
             }
@@ -36,7 +36,7 @@ extension EditorManager {
             guard let activeEditor = state.groups.find(
                 editor: state.activeEditor
             ) ?? state.groups.findSomeEditor() else {
-                logger.warning("Editor state could not restore active editor.")
+				Self.logger.warning("Editor state could not restore active editor.")
                 initCleanState()
                 return
             }
@@ -45,9 +45,8 @@ extension EditorManager {
 
             self.editorLayout = state.groups
             self.activeEditor = activeEditor
-            switchToActiveEditor()
         } catch {
-            logger.warning(
+			Self.logger.warning(
                 "Could not restore editor state from saved data: \(error.localizedDescription, privacy: .public)"
             )
         }
@@ -60,7 +59,7 @@ extension EditorManager {
     /// - Parameters:
     ///   - group: The tab group to fix.
     ///   - fileManager: The file manager to use to map files.
-    private func fixRestoredEditorLayout(_ group: EditorLayout, workspace: WorkspaceDocument) throws {
+    private func fixRestoredEditorLayout(_ group: EditorLayout, workspace: WorkspaceModel) throws {
         switch group {
         case let .one(data):
             try fixEditor(data, workspace: workspace)
@@ -94,7 +93,7 @@ extension EditorManager {
     /// - Parameters:
     ///   - data: The tab group to fix.
     ///   - fileManager: The file manager to use to map files.a
-    private func fixEditor(_ editor: Editor, workspace: WorkspaceDocument) throws {
+    private func fixEditor(_ editor: Editor, workspace: WorkspaceModel) throws {
         guard let fileManager = workspace.workspaceFileManager else { return }
         let resolvedTabs = editor
             .tabs
@@ -120,7 +119,7 @@ extension EditorManager {
         }
     }
 
-    func saveRestorationState(_ workspace: WorkspaceDocument) {
+    func saveRestorationState(_ workspace: WorkspaceModel) {
         if let data = try? JSONEncoder().encode(
             EditorRestorationState(activeEditor: activeEditor.id, groups: editorLayout)
         ) {

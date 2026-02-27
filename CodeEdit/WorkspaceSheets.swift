@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct WorkspaceSheets: View {
-    @EnvironmentObject var sourceControlManager: SourceControlManager
+    @Bindable var sourceControlManager: RepositoryModel
 
     var body: some View {
         EmptyView()
@@ -17,7 +17,7 @@ struct WorkspaceSheets: View {
                        !sourceControlManager.addExistingRemoteSheetIsPresented },
                 set: { sourceControlManager.pushSheetIsPresented = $0 }
             )) {
-                SourceControlPushView()
+				SourceControlPushView(sourceControlManager: sourceControlManager)
             }
             .sheet(isPresented: Binding<Bool>(
                 get: { sourceControlManager.pullSheetIsPresented &&
@@ -28,7 +28,7 @@ struct WorkspaceSheets: View {
                 if sourceControlManager.addExistingRemoteSheetIsPresented == true {
                     SourceControlAddExistingRemoteView()
                 } else {
-                    SourceControlPullView()
+					SourceControlPullView(sourceControlManager: sourceControlManager)
                 }
             }
             .sheet(isPresented: $sourceControlManager.fetchSheetIsPresented) {

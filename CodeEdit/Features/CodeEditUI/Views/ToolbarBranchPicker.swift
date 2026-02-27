@@ -12,7 +12,7 @@ import Combine
 /// A view that pops up a branch picker.
 struct ToolbarBranchPicker: View {
     private weak var workspaceFileManager: CEWorkspaceFileManager?
-    private weak var sourceControlManager: SourceControlManager?
+    private weak var sourceControlManager: RepositoryModel?
 
     @Environment(\.controlActiveState)
     private var controlActive
@@ -27,7 +27,7 @@ struct ToolbarBranchPicker: View {
         workspaceFileManager: CEWorkspaceFileManager?
     ) {
         self.workspaceFileManager = workspaceFileManager
-        self.sourceControlManager = workspaceFileManager?.sourceControlManager
+        self.sourceControlManager = workspaceFileManager?.repository
     }
 
     var body: some View {
@@ -51,7 +51,7 @@ struct ToolbarBranchPicker: View {
                     .help(title)
                 if let currentBranch {
                     Menu(content: {
-                        if let sourceControlManager = workspaceFileManager?.sourceControlManager {
+                        if let sourceControlManager = workspaceFileManager?.repository {
                             PopoverView(sourceControlManager: sourceControlManager)
                         }
                     }, label: {
@@ -77,12 +77,9 @@ struct ToolbarBranchPicker: View {
                 }
             }
         }
-        .onReceive(
-            self.sourceControlManager?.$currentBranch.eraseToAnyPublisher() ??
-            Empty().eraseToAnyPublisher()
-        ) { branch in
-            self.currentBranch = branch
-        }
+		.onChange(of: sourceControlManager?.currentBranch) { _, newValue in
+			self.currentBranch = newValue
+		}
         .task {
             if Settings.shared.preferences.sourceControl.general.sourceControlIsEnabled {
                 await self.sourceControlManager?.refreshCurrentBranch()
@@ -108,7 +105,7 @@ struct ToolbarBranchPicker: View {
     ///
     /// It displays the currently checked-out branch and all other local branches.
     private struct PopoverView: View {
-        @ObservedObject var sourceControlManager: SourceControlManager
+        let sourceControlManager: RepositoryModel
 
         var body: some View {
             VStack(alignment: .leading) {
@@ -182,13 +179,13 @@ struct ToolbarBranchPicker: View {
 
         /// A Button Cell that represents a branch in the branch picker
         struct BranchCell: View {
-            let sourceControlManager: SourceControlManager
+            let sourceControlManager: RepositoryModel
             let branch: GitBranch
             let active: Bool
             let title: String?
 
             init(
-                sourceControlManager: SourceControlManager,
+                sourceControlManager: RepositoryModel,
                 branch: GitBranch,
                 active: Bool = false,
                 title: String? = nil

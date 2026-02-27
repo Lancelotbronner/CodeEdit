@@ -8,12 +8,12 @@
 import SwiftUI
 
 struct SourceControlCommands: Commands {
-    @State private var windowController: CodeEditWindowController?
+	@FocusedValue(\.workspace) private var workspace
 
     @State private var confirmDiscardChanges: Bool = false
 
-    var sourceControlManager: SourceControlManager? {
-        windowController?.workspace?.sourceControlManager
+    var sourceControlManager: RepositoryModel? {
+        workspace?.workspaceRepository
     }
 
     var body: some Commands {
@@ -108,8 +108,7 @@ struct SourceControlCommands: Commands {
                     sourceControlManager?.addExistingRemoteSheetIsPresented = true
                 }
             }
-            .disabled(windowController?.workspace == nil)
-            .observeWindowController($windowController)
+            .disabled(workspace == nil)
         }
     }
 }

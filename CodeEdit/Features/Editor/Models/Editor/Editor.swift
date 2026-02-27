@@ -60,7 +60,7 @@ final class Editor: ObservableObject, Identifiable {
     var id = UUID()
 
     weak var parent: SplitViewData?
-    weak var workspace: WorkspaceDocument?
+    weak var workspace: WorkspaceModel?
 
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "", category: "Editor")
 
@@ -76,7 +76,7 @@ final class Editor: ObservableObject, Identifiable {
         selectedTab: Tab? = nil,
         temporaryTab: Tab? = nil,
         parent: SplitViewData? = nil,
-        workspace: WorkspaceDocument? = nil
+        workspace: WorkspaceModel? = nil
     ) {
         self.parent = parent
         self.workspace = workspace
@@ -95,7 +95,7 @@ final class Editor: ObservableObject, Identifiable {
         selectedTab: Tab? = nil,
         temporaryTab: Tab? = nil,
         parent: SplitViewData? = nil,
-        workspace: WorkspaceDocument? = nil
+        workspace: WorkspaceModel? = nil
     ) {
         self.tabs = []
         self.parent = parent
@@ -289,11 +289,12 @@ final class Editor: ObservableObject, Identifiable {
                 _ = shouldClose.move()
                 shouldClose.deallocate()
             }
-            codeFile.canClose(
-                withDelegate: self,
-                shouldClose: #selector(document(_:shouldClose:contextInfo:)),
-                contextInfo: shouldClose
-            )
+			//TODO: reimplement
+//            codeFile.canClose(
+//                withDelegate: self,
+//                shouldClose: #selector(document(_:shouldClose:contextInfo:)),
+//                contextInfo: shouldClose
+//            )
 
             return shouldClose.pointee
         }

@@ -1248,7 +1248,7 @@
 				<string>public.folder</string>
 			</array>
 			<key>NSDocumentClass</key>
-			<string>WorkspaceDocument</string>
+			<string>WorkspaceModel</string>
 		</dict>
 	</array>
 	<key>CFBundleExecutable</key>

@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct SourceControlNavigatorToolbarBottom: View {
-    @EnvironmentObject private var workspace: WorkspaceDocument
-    @EnvironmentObject var sourceControlManager: SourceControlManager
+    @Environment(WorkspaceModel.self) var workspace
+    @Environment(RepositoryModel.self) var sourceControlManager
 
     @State private var text = ""
 

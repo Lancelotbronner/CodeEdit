@@ -8,13 +8,14 @@
 import SwiftUI
 
 struct TaskDropDownView: View {
+	@Environment(\.openWindow) private var openWindow
     @Environment(\.colorScheme)
     private var colorScheme
 
     @Environment(\.controlActiveState)
     private var activeState
 
-    @ObservedObject var taskManager: TaskManager
+    var taskManager: TaskManager
 
     @State private var isTaskPopOverPresented: Bool = false
     @State private var isHoveringTasks: Bool = false
@@ -121,10 +122,10 @@ struct TaskDropDownView: View {
                 .padding(.vertical, 5)
         }
         OptionMenuItemView(label: "Add Task...") {
-            NSApp.sendAction(#selector(CodeEditWindowController.openWorkspaceSettings(_:)), to: nil, from: nil)
+			openWindow(sceneID: .workspaceSettings)
         }
         OptionMenuItemView(label: "Manage Tasks...") {
-            NSApp.sendAction(#selector(CodeEditWindowController.openWorkspaceSettings(_:)), to: nil, from: nil)
+			openWindow(sceneID: .workspaceSettings)
         }
     }
 }

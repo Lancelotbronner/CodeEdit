@@ -10,8 +10,8 @@ import Combine
 import CodeEditSourceEditor
 
 struct StatusBarCursorPositionLabel: View {
-    @EnvironmentObject private var utilityAreaViewModel: UtilityAreaViewModel
-    @EnvironmentObject private var editorManager: EditorManager
+    let utilityAreaViewModel: UtilityAreaViewModel
+	@Environment(EditorManager.self) private var editorManager
 
     @State private var tab: EditorInstance?
 
@@ -35,9 +35,9 @@ struct StatusBarCursorPositionLabel: View {
         .onAppear {
             updateSource()
         }
-        .onReceive(editorManager.tabBarTabIdSubject) { _ in
-            updateSource()
-        }
+		.onChange(of: editorManager.tabBarTabId) {
+			updateSource()
+		}
     }
 
     struct LineLabel: View {

@@ -8,15 +8,15 @@
 import SwiftUI
 
 struct FindNavigatorView: View {
-    @EnvironmentObject private var workspace: WorkspaceDocument
+    @Environment(WorkspaceModel.self) var workspace
 
-    private var state: WorkspaceDocument.SearchState {
+    private var state: WorkspaceModel.SearchState {
         workspace.searchState ?? .init(workspace)
     }
 
     @State private var foundFilesCount: Int = 0
     @State private var searchResultCount: Int = 0
-    @State private var findNavigatorStatus: WorkspaceDocument.SearchState.FindNavigatorStatus = .none
+    @State private var findNavigatorStatus: WorkspaceModel.SearchState.FindNavigatorStatus = .none
     @State private var findResultMessage: String?
 
     var body: some View {

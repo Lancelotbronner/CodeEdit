@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct SourceControlNavigatorChangesView: View {
-    @EnvironmentObject var sourceControlManager: SourceControlManager
+	@Environment(WorkspaceModel.self) var workspace
+    @Environment(RepositoryModel.self) var sourceControlManager
 
     var hasRemotes: Bool {
         !sourceControlManager.remotes.isEmpty
@@ -48,14 +49,14 @@ struct SourceControlNavigatorChangesView: View {
                 Divider()
             }
             if hasChanges {
-                SourceControlNavigatorChangesList()
+				SourceControlNavigatorChangesList(sourceControlManager: sourceControlManager)
             } else {
                 CEContentUnavailableView("No Changes")
             }
         }
         .frame(maxHeight: .infinity)
         .task {
-            await sourceControlManager.refreshAllChangedFiles()
+			await sourceControlManager.refreshAllChangedFiles(in: workspace.workspaceFileManager!)
             await sourceControlManager.refreshNumberOfUnsyncedCommits()
         }
     }

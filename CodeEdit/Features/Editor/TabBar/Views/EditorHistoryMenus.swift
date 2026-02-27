@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct EditorHistoryMenus: View {
-    @EnvironmentObject private var editorManager: EditorManager
+    @Environment(EditorManager.self) private var editorManager
     @EnvironmentObject private var editor: Editor
 
     var body: some View {

@@ -12,7 +12,8 @@ struct SourceControlNavigatorRepositoryView: View {
     @Environment(\.controlActiveState)
     var controlActiveState
 
-    @EnvironmentObject var sourceControlManager: SourceControlManager
+	@Environment(WorkspaceModel.self) var workspace
+    @Environment(RepositoryModel.self) var sourceControlManager
 
     @State var selection = Set<String>()
     @State var showNewBranch: Bool = false
@@ -88,7 +89,7 @@ struct SourceControlNavigatorRepositoryView: View {
                 Button("Apply") {
                     if let stashEntry = stashEntryToApply {
                         Task {
-                            try await sourceControlManager.applyStashEntry(stashEntry: stashEntry)
+							try await sourceControlManager.applyStashEntry(stashEntry: stashEntry, in: workspace)
                             applyStashedChangesIsPresented = false
                             stashEntryToApply = nil
                         }
@@ -97,7 +98,7 @@ struct SourceControlNavigatorRepositoryView: View {
                 Button("Apply and Delete") {
                     if let stashEntry = stashEntryToApply {
                         Task {
-                            try await sourceControlManager.applyStashEntry(stashEntry: stashEntry)
+							try await sourceControlManager.applyStashEntry(stashEntry: stashEntry, in: workspace)
                             try await sourceControlManager.deleteStashEntry(stashEntry: stashEntry)
                             applyStashedChangesIsPresented = false
                             stashEntryToApply = nil

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct NotificationToolbarItem: View {
-    @EnvironmentObject private var workspace: WorkspaceDocument
+    @Environment(WorkspaceModel.self) var workspace
     @ObservedObject private var notificationManager = NotificationManager.shared
     @Environment(\.controlActiveState)
     private var controlActiveState

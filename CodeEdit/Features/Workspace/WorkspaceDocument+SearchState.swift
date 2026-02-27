@@ -1,5 +1,5 @@
 //
-//  WorkspaceDocument+SearchState.swift
+//  WorkspaceModel+SearchState.swift
 //  CodeEdit
 //
 //  Created by Tom Ludwig on 16.01.24.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension WorkspaceDocument {
+extension WorkspaceModel {
     final class SearchState: ObservableObject {
         enum IndexStatus: Equatable {
             case none
@@ -37,7 +37,7 @@ extension WorkspaceDocument {
 
         @Published var shouldFocusSearchField: Bool = false
 
-        unowned var workspace: WorkspaceDocument
+        unowned var workspace: WorkspaceModel
         var tempSearchResults = [SearchResultModel]()
         var caseSensitive: Bool = false
         var indexer: SearchIndexer?
@@ -47,7 +47,7 @@ extension WorkspaceDocument {
             .Containing
         ]
 
-        init(_ workspace: WorkspaceDocument) {
+        init(_ workspace: WorkspaceModel) {
             self.workspace = workspace
             self.indexer = SearchIndexer.Memory.create()
             addProjectToIndex()

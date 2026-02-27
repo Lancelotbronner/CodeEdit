@@ -25,8 +25,8 @@ struct UtilityAreaDebugView: View {
     @Environment(\.colorScheme)
     private var colorScheme
 
-    @EnvironmentObject private var utilityAreaViewModel: UtilityAreaViewModel
-    @EnvironmentObject private var taskManager: TaskManager
+	@Environment(UtilityAreaViewModel.self) var utilityAreaViewModel
+	@Environment(TaskManager.self) private var taskManager
 
     @State private var scrollProxy: ScrollViewProxy?
 
@@ -39,6 +39,7 @@ struct UtilityAreaDebugView: View {
     }
 
     var body: some View {
+		@Bindable var taskManager = taskManager
         UtilityAreaTabView(model: utilityAreaViewModel.tabViewModel) { _ in
             ZStack {
                 HStack { Spacer() }
@@ -123,11 +124,12 @@ struct UtilityAreaDebugView: View {
                 .accentColor(.secondary)
                 .paneToolbar { Spacer() } // Background
             }
-        }.onReceive(taskManager.$activeTasks) { newTasks in
-            if taskManager.taskShowingOutput == nil {
-                taskManager.taskShowingOutput = newTasks.first?.key
-            }
         }
+		.onChange(of: taskManager.activeTasks) {
+			if taskManager.taskShowingOutput == nil {
+				taskManager.taskShowingOutput = taskManager.activeTasks.first?.key
+			}
+		}
     }
 
     /// Returns the `background` color of the selected theme

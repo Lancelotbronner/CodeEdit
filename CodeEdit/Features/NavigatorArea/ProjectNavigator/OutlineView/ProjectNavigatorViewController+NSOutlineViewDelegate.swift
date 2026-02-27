@@ -46,8 +46,8 @@ extension ProjectNavigatorViewController: NSOutlineViewDelegate {
 
         if !item.isFolder && shouldSendSelectionUpdate {
             shouldSendSelectionUpdate = false
-            if workspace?.editorManager?.activeEditor.selectedTab?.file != item {
-                workspace?.editorManager?.activeEditor.openTab(file: item, asTemporary: true)
+			if workspace?.editorManager.activeEditor.selectedTab?.file != item {
+				workspace?.editorManager.activeEditor.openTab(file: item, asTemporary: true)
             }
             shouldSendSelectionUpdate = true
         }
@@ -64,7 +64,7 @@ extension ProjectNavigatorViewController: NSOutlineViewDelegate {
             expandedItems.insert(item)
         }
 
-        guard let id = workspace.editorManager?.activeEditor.selectedTab?.file.id,
+		guard let id = workspace.editorManager.activeEditor.selectedTab?.file.id,
               let item = workspace.workspaceFileManager?.getFile(id, createIfNotFound: true),
               /// update outline selection only if the parent of selected item match with expanded item
               item.parent === notification.userInfo?["NSObject"] as? CEWorkspaceFile else {
@@ -98,7 +98,7 @@ extension ProjectNavigatorViewController: NSOutlineViewDelegate {
     /// Finds and selects an ``Item`` from an array of ``Item`` and their `children` based on the `id`.
     /// - Parameters:
     ///   - id: the id of the item item
-    ///   - collection: the array to search for
+	///   
     ///   - forcesReveal: The boolean to indicates whether or not it should force to reveal the selected file.
     func select(by id: EditorTabID, forcesReveal: Bool) {
         guard case .codeEditor(let path) = id,

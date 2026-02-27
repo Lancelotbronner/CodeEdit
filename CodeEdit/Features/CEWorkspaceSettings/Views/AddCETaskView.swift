@@ -8,18 +8,14 @@
 import SwiftUI
 
 struct AddCETaskView: View {
-    @Environment(\.dismiss)
-    var dismiss
+    @Environment(\.dismiss) var dismiss
 
-    @EnvironmentObject var workspaceSettingsManager: CEWorkspaceSettings
-    @StateObject var newTask: CETask
+    let workspaceSettingsManager: WorkspaceSettingsManager
+    @StateObject var newTask = CETask(target: "My Mac")
 
-    init() {
-        self._newTask = StateObject(wrappedValue: CETask(target: "My Mac"))
-    }
     var body: some View {
         VStack(spacing: 0) {
-            CETaskFormView(task: newTask)
+			CETaskFormView(workspaceSettingsManager: workspaceSettingsManager, task: newTask)
             Divider()
             HStack {
                 Button {
@@ -48,5 +44,5 @@ struct AddCETaskView: View {
 }
 
 #Preview {
-    AddCETaskView()
+	AddCETaskView(workspaceSettingsManager: .init(workspaceURL: URL(fileURLWithPath: "/tmp/")))
 }

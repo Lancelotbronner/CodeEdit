@@ -11,8 +11,8 @@ import Combine
 /// Wraps an ``OutlineViewController`` inside a `NSViewControllerRepresentable`
 struct ProjectNavigatorOutlineView: NSViewControllerRepresentable {
 
-    @EnvironmentObject var workspace: WorkspaceDocument
-    @EnvironmentObject var editorManager: EditorManager
+    @Environment(WorkspaceModel.self) var workspace
+	@Environment(EditorManager.self) var editorManager
 
     @StateObject var prefs: Settings = .shared
 
@@ -37,7 +37,9 @@ struct ProjectNavigatorOutlineView: NSViewControllerRepresentable {
         nsViewController.shownFileExtensions = prefs.preferences.general.shownFileExtensions
         nsViewController.hiddenFileExtensions = prefs.preferences.general.hiddenFileExtensions
         /// if the window becomes active from background, it will restore the selection to outline view.
-        nsViewController.updateSelection(itemID: workspace.editorManager?.activeEditor.selectedTab?.file.id)
+		nsViewController.updateSelection(itemID: workspace.editorManager.activeEditor.selectedTab?.file.id)
+		context.coordinator.controller?.updateSelection(itemID: workspace.editorManager.tabBarTabId?.file.id)
+		context.coordinator.controller?.handleFilterChange()
         return
     }
 
@@ -46,7 +48,7 @@ struct ProjectNavigatorOutlineView: NSViewControllerRepresentable {
     }
 
     class Coordinator: NSObject, CEWorkspaceFileManagerObserver {
-        init(_ workspace: WorkspaceDocument) {
+        init(_ workspace: WorkspaceModel) {
             self.workspace = workspace
             super.init()
 
@@ -58,27 +60,10 @@ struct ProjectNavigatorOutlineView: NSViewControllerRepresentable {
                     self?.controller?.reveal(fileItem)
                 })
                 .store(in: &cancellables)
-            workspace.editorManager?.tabBarTabIdSubject
-                .sink { [weak self] editorInstance in
-                    self?.controller?.updateSelection(itemID: editorInstance?.file.id)
-                }
-                .store(in: &cancellables)
-            workspace.$navigatorFilter
-                .throttle(for: 0.1, scheduler: RunLoop.main, latest: true)
-                .sink { [weak self] _ in
-                    self?.controller?.handleFilterChange()
-                }
-                .store(in: &cancellables)
-            Publishers.Merge(workspace.$sourceControlFilter, workspace.$sortFoldersOnTop)
-                .throttle(for: 0.1, scheduler: RunLoop.main, latest: true)
-                .sink { [weak self] _ in
-                    self?.controller?.handleFilterChange()
-                }
-                .store(in: &cancellables)
         }
 
         var cancellables: Set<AnyCancellable> = []
-        weak var workspace: WorkspaceDocument?
+        weak var workspace: WorkspaceModel?
         weak var controller: ProjectNavigatorViewController?
 
         func fileManagerUpdated(updatedItems: Set<CEWorkspaceFile>) {

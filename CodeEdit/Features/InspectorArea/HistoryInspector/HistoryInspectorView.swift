@@ -10,9 +10,9 @@ struct HistoryInspectorView: View {
     @AppSettings(\.sourceControl.git.showMergeCommitsPerFileLog)
     var showMergeCommitsPerFileLog
 
-    @EnvironmentObject private var workspace: WorkspaceDocument
+    @Environment(WorkspaceModel.self) var workspace
 
-    @EnvironmentObject private var editorManager: EditorManager
+    @Environment(EditorManager.self) private var editorManager
 
     @ObservedObject private var model: HistoryInspectorModel
 
@@ -26,24 +26,20 @@ struct HistoryInspectorView: View {
 
     var body: some View {
         Group {
-            if model.sourceControlManager != nil {
-                VStack {
-                    if model.commitHistory.isEmpty {
-                        CEContentUnavailableView("No History")
-                    } else {
-                        List(selection: $selection) {
-                            ForEach(model.commitHistory) { commit in
-                                HistoryInspectorItemView(commit: commit, selection: $selection)
-                                    .tag(commit)
-                                    .listRowSeparator(.hidden)
-                            }
-                        }
-                    }
-                }
-            } else {
-                NoSelectionInspectorView()
-            }
-        }
+			VStack {
+				if model.commitHistory.isEmpty {
+					CEContentUnavailableView("No History")
+				} else {
+					List(selection: $selection) {
+						ForEach(model.commitHistory) { commit in
+							HistoryInspectorItemView(commit: commit, selection: $selection)
+								.tag(commit)
+								.listRowSeparator(.hidden)
+						}
+					}
+				}
+			}
+		}
         .onReceive(editorManager.activeEditor.objectWillChange) { _ in
             Task {
                 await model.setFile(url: editorManager.activeEditor.selectedTab?.file.url.path())
@@ -60,7 +56,7 @@ struct HistoryInspectorView: View {
             }
         }
         .task {
-            await model.setWorkspace(sourceControlManager: workspace.sourceControlManager)
+            await model.setWorkspace(sourceControlManager: workspace.workspaceRepository)
             await model.setFile(url: editorManager.activeEditor.selectedTab?.file.url.path)
         }
         .onChange(of: showMergeCommitsPerFileLog) { _, _ in

@@ -19,11 +19,13 @@ struct OpenQuicklyPreviewView: View {
 
     init(item: CEWorkspaceFile) {
         self.item = item
-        let doc = try? CodeFileDocument(
-            for: item.url,
-            withContentsOf: item.url,
-            ofType: item.contentType?.identifier ?? "public.source-code"
-        )
+		//TODO: reimplement
+//        let doc = try? CodeFileDocument(
+//            for: item.url,
+//            withContentsOf: item.url,
+//            ofType: item.contentType?.identifier ?? "public.source-code"
+//        )
+		let doc = CodeFileDocument?.none
         self._editorInstance = .init(wrappedValue: EditorInstance(workspace: nil, file: item))
         self._document = .init(wrappedValue: doc ?? .init())
     }

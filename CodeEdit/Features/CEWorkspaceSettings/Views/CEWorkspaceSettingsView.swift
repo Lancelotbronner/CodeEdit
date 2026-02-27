@@ -10,8 +10,8 @@ import SwiftUI
 struct CEWorkspaceSettingsView: View {
     var dismiss: () -> Void
 
-    @EnvironmentObject var workspaceSettingsManager: CEWorkspaceSettings
-    @EnvironmentObject var workspace: WorkspaceDocument
+    @Bindable var workspaceSettingsManager: WorkspaceSettingsManager
+    @Environment(WorkspaceModel.self) var workspace
 
     @State var selectedTaskID: UUID?
     @State var showAddTaskSheet: Bool = false
@@ -32,7 +32,9 @@ struct CEWorkspaceSettingsView: View {
 
                 Section {
                     CEWorkspaceSettingsTaskListView(
-                        settings: workspaceSettingsManager.settings,
+						workspaceSettingsManager: workspaceSettingsManager,
+						taskManager: workspace.taskManager!,
+						settings: workspaceSettingsManager.settings,
                         selectedTaskID: $selectedTaskID,
                         showAddTaskSheet: $showAddTaskSheet
                     )
@@ -71,16 +73,20 @@ struct CEWorkspaceSettingsView: View {
                 $0.id == selectedTaskID
             }) {
                 EditCETaskView(
-                    task: workspaceSettingsManager.settings.tasks[selectedTaskIndex],
-                    selectedTaskIndex: selectedTaskIndex
+					workspaceSettingsManager: workspaceSettingsManager,
+					taskManager: workspace.taskManager!,
+					task: workspaceSettingsManager.settings.tasks[selectedTaskIndex],
+					selectedTaskIndex: selectedTaskIndex
                 )
             } else {
-                AddCETaskView()
+				AddCETaskView(workspaceSettingsManager: workspaceSettingsManager)
             }
         }
     }
 }
 
 #Preview {
-    CEWorkspaceSettingsView(dismiss: { print("Dismiss") })
+	CEWorkspaceSettingsView(
+		dismiss: { print("Dismiss") },
+		workspaceSettingsManager: .init(workspaceURL: URL(fileURLWithPath: "/tmp")))
 }

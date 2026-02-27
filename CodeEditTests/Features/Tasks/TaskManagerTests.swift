@@ -13,10 +13,10 @@ import Testing
 @Suite(.serialized)
 class TaskManagerTests {
     var taskManager: TaskManager!
-    var mockWorkspaceSettings: CEWorkspaceSettingsData!
+    var mockWorkspaceSettings: WorkspaceSettings!
 
     init() throws {
-        let workspaceSettings = try JSONDecoder().decode(CEWorkspaceSettingsData.self, from: Data("{}".utf8))
+        let workspaceSettings = try JSONDecoder().decode(WorkspaceSettings.self, from: Data("{}".utf8))
         mockWorkspaceSettings = workspaceSettings
         taskManager = TaskManager(workspaceSettings: mockWorkspaceSettings, workspaceURL: nil)
     }

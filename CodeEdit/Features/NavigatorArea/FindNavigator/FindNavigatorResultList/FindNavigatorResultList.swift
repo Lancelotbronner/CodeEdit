@@ -10,7 +10,7 @@ import Combine
 
 struct FindNavigatorResultList: NSViewControllerRepresentable {
 
-    @EnvironmentObject var workspace: WorkspaceDocument
+    @Environment(WorkspaceModel.self) var workspace
 
     @AppSettings(\.general.projectNavigatorSize)
     var projectNavigatorSize
@@ -43,7 +43,7 @@ struct FindNavigatorResultList: NSViewControllerRepresentable {
     }
 
     class Coordinator: NSObject {
-        init(state: WorkspaceDocument.SearchState?, controller: FindNavigatorListViewController?) {
+        init(state: WorkspaceModel.SearchState?, controller: FindNavigatorListViewController?) {
             self.controller = controller
             super.init()
             self.listener = state?

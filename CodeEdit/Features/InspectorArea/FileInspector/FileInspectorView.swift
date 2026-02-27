@@ -8,9 +8,9 @@ import SwiftUI
 import CodeEditLanguages
 
 struct FileInspectorView: View {
-    @EnvironmentObject private var workspace: WorkspaceDocument
+    @Environment(WorkspaceModel.self) var workspace
 
-    @EnvironmentObject private var editorManager: EditorManager
+    @Environment(EditorManager.self) private var editorManager
 
     @AppSettings(\.textEditing)
     private var textEditing

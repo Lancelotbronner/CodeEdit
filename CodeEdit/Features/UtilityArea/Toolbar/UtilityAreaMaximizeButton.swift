@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct UtilityAreaMaximizeButton: View {
-    @EnvironmentObject private var utilityAreaViewModel: UtilityAreaViewModel
+    let utilityAreaViewModel: UtilityAreaViewModel
 
     var body: some View {
         Button {

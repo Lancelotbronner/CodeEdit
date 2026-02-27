@@ -21,7 +21,7 @@ struct UpdateStatusBarInfo: ViewModifier {
         self.fileURL = fileURL
     }
 
-    @EnvironmentObject private var editorManager: EditorManager
+	@Environment(EditorManager.self) private var editorManager
     @EnvironmentObject private var statusBarViewModel: StatusBarViewModel
 
     /// This is returned by ``UpdateStatusBarInfo`` `.computeStatusBarInfo`.

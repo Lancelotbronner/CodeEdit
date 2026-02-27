@@ -25,9 +25,9 @@ struct UtilityAreaTerminalView: View {
     @Environment(\.colorScheme)
     private var colorScheme
 
-    @EnvironmentObject private var workspace: WorkspaceDocument
+    @Environment(WorkspaceModel.self) var workspace
 
-    @EnvironmentObject private var utilityAreaViewModel: UtilityAreaViewModel
+	@Environment(UtilityAreaViewModel.self) var utilityAreaViewModel
 
     @State private var sidebarIsCollapsed = false
 
@@ -89,6 +89,7 @@ struct UtilityAreaTerminalView: View {
     }
 
     var body: some View {
+		@Bindable var utilityAreaViewModel = utilityAreaViewModel
         UtilityAreaTabView(model: utilityAreaViewModel.tabViewModel) { tabState in
             ZStack {
                 // Keeps the sidebar from changing sizes because TerminalEmulatorView takes a µs to load in
@@ -161,12 +162,9 @@ struct UtilityAreaTerminalView: View {
         } leadingSidebar: { _ in
             UtilityAreaTerminalSidebar()
         }
-        .onAppear {
-            guard let workspaceURL = workspace.fileURL else {
-                assertionFailure("Workspace does not have a file URL.")
-                return
-            }
-            utilityAreaViewModel.initializeTerminals(workspaceURL: workspaceURL)
+		.onChange(of: workspace.fileURL, initial: true) {
+			guard let url = workspace.fileURL else { return }
+            utilityAreaViewModel.initializeTerminals(workspaceURL: url)
         }
         .accessibilityIdentifier("terminal-area")
     }

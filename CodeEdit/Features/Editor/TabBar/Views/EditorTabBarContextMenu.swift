@@ -23,7 +23,7 @@ struct EditorTabBarContextMenu: ViewModifier {
         self.isTemporary = isTemporary
     }
 
-    @EnvironmentObject var workspace: WorkspaceDocument
+    @Environment(WorkspaceModel.self) var workspace
 
     @EnvironmentObject var tabs: Editor
 
@@ -140,7 +140,7 @@ struct EditorTabBarContextMenu: ViewModifier {
         let newEditor = Editor(files: [item], workspace: workspace)
         splitEditor(edge, newEditor)
         tabs.closeTab(file: item)
-        workspace.editorManager?.activeEditor = newEditor
+        workspace.editorManager.activeEditor = newEditor
     }
 
     /// Copies the relative path from the workspace folder to the given file item to the pasteboard.
