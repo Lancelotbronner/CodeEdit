@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 73;
+	objectVersion = 90;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -76,35 +76,29 @@
 /* Begin PBXCopyFilesBuildPhase section */
 		04C3255A2801B43A00C8DA2D /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
 			dstPath = "";
-			dstSubfolderSpec = 10;
+			dstSubfolder = Frameworks;
 			files = (
 				6C6BD6F929CD14D100235D17 /* CodeEditKit in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		2BE487F528245162003F3F64 /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
 			dstPath = "";
-			dstSubfolderSpec = 13;
+			dstSubfolder = PlugIns;
 			files = (
 				2BE487F428245162003F3F64 /* OpenWithCodeEdit.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		6C6BD6FD29CD154900235D17 /* Embed ExtensionKit ExtensionPoint */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
 			dstPath = "$(EXTENSIONS_FOLDER_PATH)";
-			dstSubfolderSpec = 16;
+			dstSubfolder = Product;
 			files = (
 			);
 			name = "Embed ExtensionKit ExtensionPoint";
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
@@ -124,14 +118,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		B62454482D78A3CC009A86D1 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+		B62454482D78A3CC009A86D1 /* Exceptions for "CodeEdit" folder in "CodeEdit" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
 			target = B658FB2B27DA9E0F00EA4DBD /* CodeEdit */;
 		};
-		B62454D02D78A3D8009A86D1 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+		B62454D02D78A3D8009A86D1 /* Exceptions for "OpenWithCodeEdit" folder in "OpenWithCodeEdit" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				FinderSync.swift,
@@ -142,7 +136,7 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
-		B62454492D78A3CC009A86D1 /* PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet */ = {
+		B62454492D78A3CC009A86D1 /* Exceptions for "CodeEdit" folder in "Embed ExtensionKit ExtensionPoint" phase from "CodeEdit" target */ = {
 			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
 			buildPhase = 6C6BD6FD29CD154900235D17 /* Embed ExtensionKit ExtensionPoint */;
 			membershipExceptions = (
@@ -152,24 +146,48 @@
 /* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		B624520B2D78A3CC009A86D1 /* CodeEdit */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (B62454482D78A3CC009A86D1 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, B62454492D78A3CC009A86D1 /* PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = CodeEdit; sourceTree = "<group>"; };
-		B624544F2D78A3D3009A86D1 /* Configs */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Configs; sourceTree = "<group>"; };
-		B62454602D78A3D4009A86D1 /* CodeEditUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = CodeEditUITests; sourceTree = "<group>"; };
-		B62454A32D78A3D4009A86D1 /* CodeEditTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = CodeEditTests; sourceTree = "<group>"; };
-		B62454CD2D78A3D8009A86D1 /* OpenWithCodeEdit */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (B62454D02D78A3D8009A86D1 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = OpenWithCodeEdit; sourceTree = "<group>"; };
+		B624520B2D78A3CC009A86D1 /* CodeEdit */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				B62454482D78A3CC009A86D1 /* Exceptions for "CodeEdit" folder in "CodeEdit" target */,
+				B62454492D78A3CC009A86D1 /* Exceptions for "CodeEdit" folder in "Embed ExtensionKit ExtensionPoint" phase from "CodeEdit" target */,
+			);
+			path = CodeEdit;
+			sourceTree = "<group>";
+		};
+		B624544F2D78A3D3009A86D1 /* Configs */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Configs;
+			sourceTree = "<group>";
+		};
+		B62454602D78A3D4009A86D1 /* CodeEditUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = CodeEditUITests;
+			sourceTree = "<group>";
+		};
+		B62454A32D78A3D4009A86D1 /* CodeEditTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = CodeEditTests;
+			sourceTree = "<group>";
+		};
+		B62454CD2D78A3D8009A86D1 /* OpenWithCodeEdit */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				B62454D02D78A3D8009A86D1 /* Exceptions for "OpenWithCodeEdit" folder in "OpenWithCodeEdit" target */,
+			);
+			path = OpenWithCodeEdit;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		2BE487E928245162003F3F64 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		B658FB2927DA9E0F00EA4DBD /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				302AD7FF2D8054D500231E16 /* ZIPFoundation in Frameworks */,
 				6C85BB402C2105ED00EB5DEF /* CodeEditKit in Frameworks */,
@@ -201,22 +219,17 @@
 				6CB94D032CA1205100E8651C /* AsyncAlgorithms in Frameworks */,
 				6C9DB9E42D55656300ACD86E /* CodeEditSourceEditor in Frameworks */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		B658FB3A27DA9E1000EA4DBD /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				583E529C29361BAB001AB554 /* SnapshotTesting in Frameworks */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		B658FB4427DA9E1000EA4DBD /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
@@ -282,8 +295,6 @@
 				2BE487EA28245162003F3F64 /* Resources */,
 			);
 			buildRules = (
-			);
-			dependencies = (
 			);
 			name = OpenWithCodeEdit;
 			productName = OpenWithCodeEdit;
@@ -385,8 +396,6 @@
 				B62454602D78A3D4009A86D1 /* CodeEditUITests */,
 			);
 			name = CodeEditUITests;
-			packageProductDependencies = (
-			);
 			productName = CodeEditUITests;
 			productReference = B658FB4727DA9E1000EA4DBD /* CodeEditUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
@@ -447,7 +456,7 @@
 				6CCF73CE2E26DE3200B94F75 /* XCRemoteSwiftPackageReference "SwiftTerm" */,
 				73AA5CEC2F4F5FF300EC4DB5 /* XCRemoteSwiftPackageReference "swift-tuple" */,
 			);
-			preferredProjectObjectVersion = 55;
+			preferredProjectObjectVersion = 90;
 			productRefGroup = B658FB2D27DA9E0F00EA4DBD /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -463,34 +472,26 @@
 /* Begin PBXResourcesBuildPhase section */
 		2BE487EA28245162003F3F64 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		B658FB2A27DA9E0F00EA4DBD /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				B6FF04782B6C08AC002C2C78 /* DefaultThemes in Resources */,
 				283BDCBD2972EEBD002AFF81 /* Package.resolved in Resources */,
 				284DC8512978BA2600BF2770 /* .all-contributorsrc in Resources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		B658FB3B27DA9E1000EA4DBD /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		B658FB4527DA9E1000EA4DBD /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
@@ -498,54 +499,37 @@
 		04ADA0CC27E6043B00BF00B2 /* Add TODO/FIXME as warnings | Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
 			name = "Add TODO/FIXME as warnings | Run Script";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "TAGS=\"TODO:|FIXME:\"\necho \"searching ${SRCROOT} for ${TAGS}\"\nfind \"${SRCROOT}\" \\( -name \"*.swift\" \\) -print0 | xargs -0 egrep --with-filename --line-number --only-matching \"($TAGS).*\\$\" | perl -p -e \"s/($TAGS)/ warning: \\$1/\"\n";
+			shellScript = (
+				"TAGS=\"TODO:|FIXME:\"",
+				"echo \"searching ${SRCROOT} for ${TAGS}\"",
+				"find \"${SRCROOT}\" \\( -name \"*.swift\" \\) -print0 | xargs -0 egrep --with-filename --line-number --only-matching \"($TAGS).*\\$\" | perl -p -e \"s/($TAGS)/ warning: \\$1/\"",
+				"",
+			);
 		};
 		2B18499A27F8A7A0005119F0 /* Mark // swiftlint:disable:all as errors | Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
 			name = "Mark // swiftlint:disable:all as errors | Run Script";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "TAGS=\"\\/\\/ swiftlint:disable all\"\necho \"searching ${SRCROOT} for ${TAGS}\"\nfind \"${SRCROOT}\" \\( -name \"*.swift\" \\) -print0 | xargs -0 egrep --with-filename --line-number --only-matching \"($TAGS).*\\$\" | perl -p -e \"s/($TAGS)/ error: Usage of \\$1 is prohibited/\"\n";
+			shellScript = (
+				"TAGS=\"\\/\\/ swiftlint:disable all\"",
+				"echo \"searching ${SRCROOT} for ${TAGS}\"",
+				"find \"${SRCROOT}\" \\( -name \"*.swift\" \\) -print0 | xargs -0 egrep --with-filename --line-number --only-matching \"($TAGS).*\\$\" | perl -p -e \"s/($TAGS)/ error: Usage of \\$1 is prohibited/\"",
+				"",
+			);
 		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		2BE487E828245162003F3F64 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		B658FB2827DA9E0F00EA4DBD /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				6CAAF69429BCD78600A1F48A /* (null) in Sources */,
 				58F2EB03292FB2B0004A9BDE /* Documentation.docc in Sources */,
@@ -553,21 +537,16 @@
 				6CAAF69229BCC71C00A1F48A /* (null) in Sources */,
 				6CAAF68A29BC9C2300A1F48A /* (null) in Sources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		B658FB3927DA9E1000EA4DBD /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		B658FB4327DA9E1000EA4DBD /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
@@ -590,7 +569,7 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		28052DEA2973045200F4F90A /* Alpha */ = {
+		28052DEA2973045200F4F90A /* Alpha configuration for PBXProject "CodeEdit" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReferenceAnchor = B624544F2D78A3D3009A86D1 /* Configs */;
 			baseConfigurationReferenceRelativePath = Alpha.xcconfig;
@@ -642,7 +621,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = "";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -657,7 +636,7 @@
 			};
 			name = Alpha;
 		};
-		28052DEB2973045200F4F90A /* Alpha */ = {
+		28052DEB2973045200F4F90A /* Alpha configuration for PBXNativeTarget "CodeEdit" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReferenceAnchor = B624544F2D78A3D3009A86D1 /* Configs */;
 			baseConfigurationReferenceRelativePath = Alpha.xcconfig;
@@ -687,7 +666,6 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = "Change in Info.plist";
 				PRODUCT_BUNDLE_IDENTIFIER = app.codeedit.CodeEdit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -697,13 +675,12 @@
 				RUNTIME_EXCEPTION_DISABLE_LIBRARY_VALIDATION = YES;
 				RUN_DOCUMENTATION_COMPILER = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 5.0;
 				SYSTEM_FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 			};
 			name = Alpha;
 		};
-		28052DEC2973045200F4F90A /* Alpha */ = {
+		28052DEC2973045200F4F90A /* Alpha configuration for PBXNativeTarget "CodeEditTests" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReferenceAnchor = B624544F2D78A3D3009A86D1 /* Configs */;
 			baseConfigurationReferenceRelativePath = Alpha.xcconfig;
@@ -730,7 +707,7 @@
 			};
 			name = Alpha;
 		};
-		28052DED2973045200F4F90A /* Alpha */ = {
+		28052DED2973045200F4F90A /* Alpha configuration for PBXNativeTarget "CodeEditUITests" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReferenceAnchor = B624544F2D78A3D3009A86D1 /* Configs */;
 			baseConfigurationReferenceRelativePath = Alpha.xcconfig;
@@ -758,7 +735,7 @@
 			};
 			name = Alpha;
 		};
-		28052DEE2973045200F4F90A /* Alpha */ = {
+		28052DEE2973045200F4F90A /* Alpha configuration for PBXNativeTarget "OpenWithCodeEdit" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReferenceAnchor = B624544F2D78A3D3009A86D1 /* Configs */;
 			baseConfigurationReferenceRelativePath = Alpha.xcconfig;
@@ -793,7 +770,7 @@
 			};
 			name = Alpha;
 		};
-		28052DEF2973045C00F4F90A /* Beta */ = {
+		28052DEF2973045C00F4F90A /* Beta configuration for PBXProject "CodeEdit" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReferenceAnchor = B624544F2D78A3D3009A86D1 /* Configs */;
 			baseConfigurationReferenceRelativePath = Beta.xcconfig;
@@ -845,7 +822,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = "";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -860,7 +837,7 @@
 			};
 			name = Beta;
 		};
-		28052DF02973045C00F4F90A /* Beta */ = {
+		28052DF02973045C00F4F90A /* Beta configuration for PBXNativeTarget "CodeEdit" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReferenceAnchor = B624544F2D78A3D3009A86D1 /* Configs */;
 			baseConfigurationReferenceRelativePath = Beta.xcconfig;
@@ -890,7 +867,6 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = "Change in Info.plist";
 				PRODUCT_BUNDLE_IDENTIFIER = app.codeedit.CodeEdit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -900,13 +876,12 @@
 				RUNTIME_EXCEPTION_DISABLE_LIBRARY_VALIDATION = YES;
 				RUN_DOCUMENTATION_COMPILER = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 5.0;
 				SYSTEM_FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 			};
 			name = Beta;
 		};
-		28052DF12973045C00F4F90A /* Beta */ = {
+		28052DF12973045C00F4F90A /* Beta configuration for PBXNativeTarget "CodeEditTests" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReferenceAnchor = B624544F2D78A3D3009A86D1 /* Configs */;
 			baseConfigurationReferenceRelativePath = Beta.xcconfig;
@@ -933,7 +908,7 @@
 			};
 			name = Beta;
 		};
-		28052DF22973045C00F4F90A /* Beta */ = {
+		28052DF22973045C00F4F90A /* Beta configuration for PBXNativeTarget "CodeEditUITests" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReferenceAnchor = B624544F2D78A3D3009A86D1 /* Configs */;
 			baseConfigurationReferenceRelativePath = Beta.xcconfig;
@@ -961,7 +936,7 @@
 			};
 			name = Beta;
 		};
-		28052DF32973045C00F4F90A /* Beta */ = {
+		28052DF32973045C00F4F90A /* Beta configuration for PBXNativeTarget "OpenWithCodeEdit" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReferenceAnchor = B624544F2D78A3D3009A86D1 /* Configs */;
 			baseConfigurationReferenceRelativePath = Beta.xcconfig;
@@ -996,7 +971,7 @@
 			};
 			name = Beta;
 		};
-		2BE487F628245162003F3F64 /* Debug */ = {
+		2BE487F628245162003F3F64 /* Debug configuration for PBXNativeTarget "OpenWithCodeEdit" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReferenceAnchor = B624544F2D78A3D3009A86D1 /* Configs */;
 			baseConfigurationReferenceRelativePath = Debug.xcconfig;
@@ -1031,7 +1006,7 @@
 			};
 			name = Debug;
 		};
-		2BE487F728245162003F3F64 /* Release */ = {
+		2BE487F728245162003F3F64 /* Release configuration for PBXNativeTarget "OpenWithCodeEdit" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReferenceAnchor = B624544F2D78A3D3009A86D1 /* Configs */;
 			baseConfigurationReferenceRelativePath = Release.xcconfig;
@@ -1066,7 +1041,7 @@
 			};
 			name = Release;
 		};
-		8B9A0E112B9FE7D7007E2DBF /* Pre */ = {
+		8B9A0E112B9FE7D7007E2DBF /* Pre configuration for PBXProject "CodeEdit" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReferenceAnchor = B624544F2D78A3D3009A86D1 /* Configs */;
 			baseConfigurationReferenceRelativePath = Alpha.xcconfig;
@@ -1119,7 +1094,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = "";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -1134,7 +1109,7 @@
 			};
 			name = Pre;
 		};
-		8B9A0E122B9FE7D7007E2DBF /* Pre */ = {
+		8B9A0E122B9FE7D7007E2DBF /* Pre configuration for PBXNativeTarget "CodeEdit" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReferenceAnchor = B624544F2D78A3D3009A86D1 /* Configs */;
 			baseConfigurationReferenceRelativePath = Alpha.xcconfig;
@@ -1165,7 +1140,6 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = "Change in Info.plist";
 				PRODUCT_BUNDLE_IDENTIFIER = app.codeedit.CodeEdit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1175,13 +1149,12 @@
 				RUNTIME_EXCEPTION_DISABLE_LIBRARY_VALIDATION = YES;
 				RUN_DOCUMENTATION_COMPILER = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 5.0;
 				SYSTEM_FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 			};
 			name = Pre;
 		};
-		8B9A0E132B9FE7D7007E2DBF /* Pre */ = {
+		8B9A0E132B9FE7D7007E2DBF /* Pre configuration for PBXNativeTarget "CodeEditTests" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReferenceAnchor = B624544F2D78A3D3009A86D1 /* Configs */;
 			baseConfigurationReferenceRelativePath = Alpha.xcconfig;
@@ -1208,7 +1181,7 @@
 			};
 			name = Pre;
 		};
-		8B9A0E142B9FE7D7007E2DBF /* Pre */ = {
+		8B9A0E142B9FE7D7007E2DBF /* Pre configuration for PBXNativeTarget "CodeEditUITests" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReferenceAnchor = B624544F2D78A3D3009A86D1 /* Configs */;
 			baseConfigurationReferenceRelativePath = Alpha.xcconfig;
@@ -1236,7 +1209,7 @@
 			};
 			name = Pre;
 		};
-		8B9A0E152B9FE7D7007E2DBF /* Pre */ = {
+		8B9A0E152B9FE7D7007E2DBF /* Pre configuration for PBXNativeTarget "OpenWithCodeEdit" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReferenceAnchor = B624544F2D78A3D3009A86D1 /* Configs */;
 			baseConfigurationReferenceRelativePath = Alpha.xcconfig;
@@ -1271,7 +1244,7 @@
 			};
 			name = Pre;
 		};
-		B658FB4F27DA9E1000EA4DBD /* Debug */ = {
+		B658FB4F27DA9E1000EA4DBD /* Debug configuration for PBXProject "CodeEdit" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReferenceAnchor = B624544F2D78A3D3009A86D1 /* Configs */;
 			baseConfigurationReferenceRelativePath = Debug.xcconfig;
@@ -1329,7 +1302,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = "";
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -1344,7 +1317,7 @@
 			};
 			name = Debug;
 		};
-		B658FB5027DA9E1000EA4DBD /* Release */ = {
+		B658FB5027DA9E1000EA4DBD /* Release configuration for PBXProject "CodeEdit" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReferenceAnchor = B624544F2D78A3D3009A86D1 /* Configs */;
 			baseConfigurationReferenceRelativePath = Release.xcconfig;
@@ -1396,7 +1369,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = "";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -1410,7 +1383,7 @@
 			};
 			name = Release;
 		};
-		B658FB5227DA9E1000EA4DBD /* Debug */ = {
+		B658FB5227DA9E1000EA4DBD /* Debug configuration for PBXNativeTarget "CodeEdit" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReferenceAnchor = B624544F2D78A3D3009A86D1 /* Configs */;
 			baseConfigurationReferenceRelativePath = Debug.xcconfig;
@@ -1440,7 +1413,6 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = "Change in Info.plist";
 				PRODUCT_BUNDLE_IDENTIFIER = app.codeedit.CodeEdit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1450,13 +1422,12 @@
 				RUNTIME_EXCEPTION_DISABLE_LIBRARY_VALIDATION = YES;
 				RUN_DOCUMENTATION_COMPILER = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 5.0;
 				SYSTEM_FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 			};
 			name = Debug;
 		};
-		B658FB5327DA9E1000EA4DBD /* Release */ = {
+		B658FB5327DA9E1000EA4DBD /* Release configuration for PBXNativeTarget "CodeEdit" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReferenceAnchor = B624544F2D78A3D3009A86D1 /* Configs */;
 			baseConfigurationReferenceRelativePath = Release.xcconfig;
@@ -1486,7 +1457,6 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = "Change in Info.plist";
 				PRODUCT_BUNDLE_IDENTIFIER = app.codeedit.CodeEdit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1496,13 +1466,12 @@
 				RUNTIME_EXCEPTION_DISABLE_LIBRARY_VALIDATION = YES;
 				RUN_DOCUMENTATION_COMPILER = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 5.0;
 				SYSTEM_FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 			};
 			name = Release;
 		};
-		B658FB5527DA9E1000EA4DBD /* Debug */ = {
+		B658FB5527DA9E1000EA4DBD /* Debug configuration for PBXNativeTarget "CodeEditTests" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReferenceAnchor = B624544F2D78A3D3009A86D1 /* Configs */;
 			baseConfigurationReferenceRelativePath = Debug.xcconfig;
@@ -1529,7 +1498,7 @@
 			};
 			name = Debug;
 		};
-		B658FB5627DA9E1000EA4DBD /* Release */ = {
+		B658FB5627DA9E1000EA4DBD /* Release configuration for PBXNativeTarget "CodeEditTests" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReferenceAnchor = B624544F2D78A3D3009A86D1 /* Configs */;
 			baseConfigurationReferenceRelativePath = Release.xcconfig;
@@ -1556,7 +1525,7 @@
 			};
 			name = Release;
 		};
-		B658FB5827DA9E1000EA4DBD /* Debug */ = {
+		B658FB5827DA9E1000EA4DBD /* Debug configuration for PBXNativeTarget "CodeEditUITests" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReferenceAnchor = B624544F2D78A3D3009A86D1 /* Configs */;
 			baseConfigurationReferenceRelativePath = Debug.xcconfig;
@@ -1585,7 +1554,7 @@
 			};
 			name = Debug;
 		};
-		B658FB5927DA9E1000EA4DBD /* Release */ = {
+		B658FB5927DA9E1000EA4DBD /* Release configuration for PBXNativeTarget "CodeEditUITests" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReferenceAnchor = B624544F2D78A3D3009A86D1 /* Configs */;
 			baseConfigurationReferenceRelativePath = Release.xcconfig;
@@ -1619,61 +1588,56 @@
 		2BE487F828245162003F3F64 /* Build configuration list for PBXNativeTarget "OpenWithCodeEdit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				2BE487F628245162003F3F64 /* Debug */,
-				2BE487F728245162003F3F64 /* Release */,
-				28052DEE2973045200F4F90A /* Alpha */,
-				8B9A0E152B9FE7D7007E2DBF /* Pre */,
-				28052DF32973045C00F4F90A /* Beta */,
+				2BE487F628245162003F3F64 /* Debug configuration for PBXNativeTarget "OpenWithCodeEdit" */,
+				2BE487F728245162003F3F64 /* Release configuration for PBXNativeTarget "OpenWithCodeEdit" */,
+				28052DEE2973045200F4F90A /* Alpha configuration for PBXNativeTarget "OpenWithCodeEdit" */,
+				8B9A0E152B9FE7D7007E2DBF /* Pre configuration for PBXNativeTarget "OpenWithCodeEdit" */,
+				28052DF32973045C00F4F90A /* Beta configuration for PBXNativeTarget "OpenWithCodeEdit" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 		B658FB2727DA9E0F00EA4DBD /* Build configuration list for PBXProject "CodeEdit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				B658FB4F27DA9E1000EA4DBD /* Debug */,
-				B658FB5027DA9E1000EA4DBD /* Release */,
-				28052DEA2973045200F4F90A /* Alpha */,
-				8B9A0E112B9FE7D7007E2DBF /* Pre */,
-				28052DEF2973045C00F4F90A /* Beta */,
+				B658FB4F27DA9E1000EA4DBD /* Debug configuration for PBXProject "CodeEdit" */,
+				B658FB5027DA9E1000EA4DBD /* Release configuration for PBXProject "CodeEdit" */,
+				28052DEA2973045200F4F90A /* Alpha configuration for PBXProject "CodeEdit" */,
+				8B9A0E112B9FE7D7007E2DBF /* Pre configuration for PBXProject "CodeEdit" */,
+				28052DEF2973045C00F4F90A /* Beta configuration for PBXProject "CodeEdit" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 		B658FB5127DA9E1000EA4DBD /* Build configuration list for PBXNativeTarget "CodeEdit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				B658FB5227DA9E1000EA4DBD /* Debug */,
-				B658FB5327DA9E1000EA4DBD /* Release */,
-				28052DEB2973045200F4F90A /* Alpha */,
-				8B9A0E122B9FE7D7007E2DBF /* Pre */,
-				28052DF02973045C00F4F90A /* Beta */,
+				B658FB5227DA9E1000EA4DBD /* Debug configuration for PBXNativeTarget "CodeEdit" */,
+				B658FB5327DA9E1000EA4DBD /* Release configuration for PBXNativeTarget "CodeEdit" */,
+				28052DEB2973045200F4F90A /* Alpha configuration for PBXNativeTarget "CodeEdit" */,
+				8B9A0E122B9FE7D7007E2DBF /* Pre configuration for PBXNativeTarget "CodeEdit" */,
+				28052DF02973045C00F4F90A /* Beta configuration for PBXNativeTarget "CodeEdit" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 		B658FB5427DA9E1000EA4DBD /* Build configuration list for PBXNativeTarget "CodeEditTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				B658FB5527DA9E1000EA4DBD /* Debug */,
-				B658FB5627DA9E1000EA4DBD /* Release */,
-				28052DEC2973045200F4F90A /* Alpha */,
-				8B9A0E132B9FE7D7007E2DBF /* Pre */,
-				28052DF12973045C00F4F90A /* Beta */,
+				B658FB5527DA9E1000EA4DBD /* Debug configuration for PBXNativeTarget "CodeEditTests" */,
+				B658FB5627DA9E1000EA4DBD /* Release configuration for PBXNativeTarget "CodeEditTests" */,
+				28052DEC2973045200F4F90A /* Alpha configuration for PBXNativeTarget "CodeEditTests" */,
+				8B9A0E132B9FE7D7007E2DBF /* Pre configuration for PBXNativeTarget "CodeEditTests" */,
+				28052DF12973045C00F4F90A /* Beta configuration for PBXNativeTarget "CodeEditTests" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 		B658FB5727DA9E1000EA4DBD /* Build configuration list for PBXNativeTarget "CodeEditUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				B658FB5827DA9E1000EA4DBD /* Debug */,
-				B658FB5927DA9E1000EA4DBD /* Release */,
-				28052DED2973045200F4F90A /* Alpha */,
-				8B9A0E142B9FE7D7007E2DBF /* Pre */,
-				28052DF22973045C00F4F90A /* Beta */,
+				B658FB5827DA9E1000EA4DBD /* Debug configuration for PBXNativeTarget "CodeEditUITests" */,
+				B658FB5927DA9E1000EA4DBD /* Release configuration for PBXNativeTarget "CodeEditUITests" */,
+				28052DED2973045200F4F90A /* Alpha configuration for PBXNativeTarget "CodeEditUITests" */,
+				8B9A0E142B9FE7D7007E2DBF /* Pre configuration for PBXNativeTarget "CodeEditUITests" */,
+				28052DF22973045C00F4F90A /* Beta configuration for PBXNativeTarget "CodeEditUITests" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
