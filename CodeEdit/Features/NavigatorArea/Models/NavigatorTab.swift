@@ -51,7 +51,7 @@ enum NavigatorTab: WorkspacePanelTab {
     var body: some View {
         switch self {
         case .project:
-            ProjectNavigatorView()
+            ProjectNavigator()
         case .sourceControl:
             SourceControlNavigatorView()
         case .search:

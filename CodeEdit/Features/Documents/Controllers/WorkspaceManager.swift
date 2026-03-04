@@ -89,8 +89,8 @@ extension WorkspaceManager {
 	}
 }
 
-private struct WorkspaceManagerProxy: ViewModifier {
-	@Bindable var manager: WorkspaceManager
+struct WorkspaceManagerProxy: ViewModifier {
+	@Bindable private var manager = WorkspaceManager.shared
 
 	func body(content: Content) -> some View {
 		content

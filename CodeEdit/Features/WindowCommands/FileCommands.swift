@@ -11,7 +11,7 @@ struct FileCommands: Commands {
     static let recentProjectsMenu = RecentProjectsMenu()
 
     @Environment(\.openWindow) private var openWindow
-	@FocusedValue(\.workspace) private var workspace
+	@FocusedValue(WorkspaceModel.self) private var workspace
 	@FocusedValue(\.utilityAreaViewModel) private var utilityAreaViewModel
 
     var body: some Commands {

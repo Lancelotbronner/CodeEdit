@@ -20,7 +20,9 @@ final class WorkspaceDocument: ReferenceFileDocument, @unchecked Sendable {
 }
 
 extension WorkspaceDocument {
-	struct Snapshot {}
+	struct Snapshot {
+		//TODO: url security scope bookmarks
+	}
 
 	func snapshot(contentType: UTType) throws -> Snapshot {
 		Snapshot()

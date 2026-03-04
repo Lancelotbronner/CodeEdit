@@ -11,7 +11,7 @@ import AboutWindow
 
 @main
 struct CodeEditApp: App {
-	@NSApplicationDelegateAdaptor var appdelegate: AppDelegate
+//	@NSApplicationDelegateAdaptor var appdelegate: AppDelegate
 	@ObservedObject var settings = Settings.shared
 
 	let updater = SoftwareUpdater()
@@ -22,7 +22,7 @@ struct CodeEditApp: App {
 			LSPService()
 		)
 
-		NSMenuItem.swizzle()
+//		NSMenuItem.swizzle()
 		NSSplitViewItem.swizzle()
 	}
 
@@ -65,9 +65,9 @@ struct CodeEditApp: App {
 			)
 
 			SettingsWindow()
-				.commands {
-					CodeEditCommands()
-				}
+//				.commands {
+//					CodeEditCommands()
+//				}
 		}
 		.environment(\.settings, settings.preferences) // Add settings to each window environment
 	}

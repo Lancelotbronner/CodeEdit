@@ -17,9 +17,8 @@ final class WorkspaceModel {
 	/// Whether the workspace only shows files with changes.
 	var sourceControlFilter = false
 
-
 	var fileURL: URL?
-	var displayName = ""
+	var displayName = String(localized: "Untitled")
 
 	let editorManager = EditorManager()
 	let statusBarViewModel = StatusBarViewModel()
@@ -28,13 +27,16 @@ final class WorkspaceModel {
 	var openQuicklyViewModel: OpenQuicklyViewModel?
 	var commandsPaletteState: QuickActionsViewModel?
 	let listenerModel = WorkspaceNotificationModel()
-	/// The root file structures loaded by this workspace.
-	var roots = ProjectManager()
+	/// The project structure loaded by this workspace.
+	var project = ProjectManager()
 	/// Manager for all the repositories loaded by this workspace.
 	var repositories = RepositoryManager()
 
+	/// Whether to present a file importer that adds a new root to the workspace.
+	var isAddToWorkspacePresented = false
+
 	var workspaceFileManager: CEWorkspaceFileManager? {
-		fileURL.flatMap(roots.files)
+		fileURL.flatMap(project.files)
 	}
 
 	var workspaceRepository: RepositoryModel? {
@@ -150,7 +152,7 @@ extension WorkspaceModel {
 		self.fileURL = url
 		self.displayName = url.lastPathComponent
 
-		async let _ = roots.load(at: url)
+		async let _ = project.getOrCreate(at: url)
 		async let _ = repositories.load(at: url)
 
 		self.searchState = .init(self)
@@ -222,3 +224,18 @@ extension WorkspaceModel {
 	}
 }
 
+struct WorkspaceProxy: ViewModifier {
+	@Bindable var model: WorkspaceModel
+
+	func body(content: Content) -> some View {
+		content
+			.fileImporter(isPresented: $model.isAddToWorkspacePresented, allowedContentTypes: [.item, .folder]) { result in
+				switch result {
+				case let .success(url):
+					model.project.addIfNew(at: url)
+				case let .failure(error):
+					print(error)
+				}
+			}
+	}
+}

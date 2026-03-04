@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SourceControlCommands: Commands {
-	@FocusedValue(\.workspace) private var workspace
+	@FocusedValue(WorkspaceModel.self) private var workspace
 
     @State private var confirmDiscardChanges: Bool = false
 

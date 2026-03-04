@@ -86,6 +86,7 @@ class DirectoryEventStream {
             debounceDuration,
             FSEventStreamCreateFlags(
                 kFSEventStreamCreateFlagUseCFTypes
+				| kFSEventStreamCreateFlagWatchRoot
                 // This will listen for file changes
                 | kFSEventStreamCreateFlagFileEvents
                 // This provides additional information, like fileId,
@@ -150,7 +151,9 @@ class DirectoryEventStream {
             }
         }
 
-        callback(events)
+		DispatchQueue.main.async {
+			self.callback(events)
+		}
     }
 
     /// Parses ``FSEvent`` from the raw flag value.

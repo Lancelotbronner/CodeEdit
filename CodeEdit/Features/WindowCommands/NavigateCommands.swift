@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct NavigateCommands: Commands {
-	@FocusedValue(\.workspace) private var workspace
+	@FocusedValue(WorkspaceModel.self) private var workspace
 
     private var editor: Editor? {
 		workspace?.editorManager.activeEditor

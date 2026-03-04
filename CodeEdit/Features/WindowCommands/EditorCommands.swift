@@ -9,7 +9,7 @@ import SwiftUI
 import CodeEditKit
 
 struct EditorCommands: Commands {
-	@FocusedValue(\.workspace) private var workspace
+	@FocusedValue(WorkspaceModel.self) private var workspace
 
     var body: some Commands {
 		let editor = workspace?.editorManager.activeEditor

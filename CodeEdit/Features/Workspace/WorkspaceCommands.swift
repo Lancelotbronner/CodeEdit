@@ -8,9 +8,16 @@
 import SwiftUI
 
 struct WorkspaceCommands: Commands {
+	@FocusedValue(WorkspaceModel.self) private var workspace
+
 	var body: some Commands {
-		CommandGroup(replacing: .newItem) {
-			Button("Open...", systemImage: "") {
+		CommandGroup(after: .newItem) {
+			let name = workspace?.displayName ?? ""
+			Button("Add Files to \"\(name)\"...") {
+				workspace?.isAddToWorkspacePresented = true
+			}
+			.disabled(workspace == nil)
+			Button("Open Workspace...") {
 				WorkspaceManager.shared.isImporterPresented = true
 			}
 		}
@@ -18,6 +25,5 @@ struct WorkspaceCommands: Commands {
 }
 
 extension FocusedValues {
-	@Entry var workspace: WorkspaceModel?
 	@Entry var utilityAreaViewModel: UtilityAreaViewModel?
 }

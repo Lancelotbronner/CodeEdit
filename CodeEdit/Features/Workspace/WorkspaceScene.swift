@@ -13,7 +13,6 @@ struct WorkspaceScene: Scene {
 			WorkspaceDocument()
 		} editor: { config in
 			WorkspaceContentView(workspace: config.document.model)
-				.focusedValue(\.workspace, config.document.model)
 				.task {
 					do {
 						try await config.document.load(using: config)
@@ -41,6 +40,7 @@ private struct WorkspaceContentView: View {
 		SettingsInjector {
 			NavigationSplitView {
 				NavigatorAreaView(workspace: workspace, viewModel: navigator)
+					.frame(minWidth: 300)
 			} detail: {
 				WindowObserver {
 					WorkspaceView(utilityAreaViewModel: workspace.utilityAreaModel)
@@ -90,6 +90,8 @@ private struct WorkspaceContentView: View {
 					NotificationToolbarItem()
 				}
 			}
+			.modifier(WorkspaceManagerProxy())
+			.modifier(WorkspaceProxy(model: workspace))
 			.environment(workspace)
 			.environment(navigator)
 			.environment(workspace.editorManager)
@@ -97,6 +99,7 @@ private struct WorkspaceContentView: View {
 			.environmentObject(workspace.undoRegistration)
 			.environment(workspace.utilityAreaModel)
 			.environment(workspace.taskManager)
+			.focusedValue(workspace)
 		}
 	}
 

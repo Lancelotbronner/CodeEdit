@@ -26,7 +26,7 @@ struct TasksToolbar: ToolbarContent {
 			.disabled(taskManager?.currentTaskStatus != .running)
 		}
 		ToolbarItem(id: "StartTaskToolbarItem") {
-			Button("Start Task", systemImage: "start.fill") {
+			Button("Start Task", systemImage: "arrowtriangle.right.fill") {
 				guard let taskManager, taskManager.currentTaskStatus == .running else { return }
 				taskManager.executeActiveTask()
 				if utilityArea?.isCollapsed ?? false {

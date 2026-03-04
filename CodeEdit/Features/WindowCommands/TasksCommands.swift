@@ -10,7 +10,7 @@ import Combine
 
 struct TasksCommands: Commands {
 	@Environment(\.openWindow) private var openWindow
-	@FocusedValue(\.workspace) private var workspace
+	@FocusedValue(WorkspaceModel.self) private var workspace
 
     var taskManager: TaskManager? {
         workspace?.taskManager
