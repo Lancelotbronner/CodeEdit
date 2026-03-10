@@ -12,7 +12,6 @@ final class ProjectManager {
 	var ignored: Set<String> = [".DS_Store", ".git"]
 	private var models: [CEWorkspaceFileManager] = []
 	var roots: [ItemModel] = []
-	var selected: Set<ItemModel> = []
 
 	//TODO: reimplement
 	var sortFoldersOnTop = true

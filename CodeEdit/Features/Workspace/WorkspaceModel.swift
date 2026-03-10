@@ -29,6 +29,7 @@ final class WorkspaceModel {
 	let listenerModel = WorkspaceNotificationModel()
 	/// The project structure loaded by this workspace.
 	var project = ProjectManager()
+	var editor = EditorManager2()
 	/// Manager for all the repositories loaded by this workspace.
 	var repositories = RepositoryManager()
 

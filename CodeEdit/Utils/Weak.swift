@@ -13,3 +13,15 @@ public struct Weak<T: AnyObject> {
 		self.wrappedValue = wrappedValue
 	}
 }
+
+extension Weak {
+	@inlinable @_transparent
+	var isNone: Bool {
+		wrappedValue == nil
+	}
+
+	@inlinable @_transparent
+	var isSome: Bool {
+		wrappedValue != nil
+	}
+}

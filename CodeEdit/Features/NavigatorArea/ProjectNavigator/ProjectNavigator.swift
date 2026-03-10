@@ -26,7 +26,7 @@ private struct ProjectList: View {
 	@Bindable var workspace: WorkspaceModel
 
 	var body: some View {
-		List(workspace.project.roots, selection: $workspace.project.selected) { item in
+		List(workspace.project.roots, selection: $workspace.editor.activeTab.projectSelection) { item in
 			ProjectCell(model: item)
 				.listRowSeparator(.hidden)
 				.listRowInsets(EdgeInsets())
